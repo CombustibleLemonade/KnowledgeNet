@@ -25,7 +25,7 @@ include_directories(${SFML_INCLUDE_DIR})
 SET(CMAKE_CXX_FLAGS "-std=c++0x")
 
 include_directories(${CMAKE_SOURCE_DIR}/Common)
-add_executable(plotTwist
+add_executable(KnowledgeNet
         Scripts/Main.cpp
         Scripts/Block.cpp)
 
@@ -33,7 +33,5 @@ add_executable(plotTwist
 # Linking & stuff
 #########################################################
 
-message(ERROR ${SFML_LIBRARIES})
-
   # create the program "test"
-target_link_libraries(plotTwist ${SFML_LIBRARIES})
+target_link_libraries(KnowledgeNet ${SFML_LIBRARIES})
