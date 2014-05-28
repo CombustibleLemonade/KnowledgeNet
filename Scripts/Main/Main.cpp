@@ -1,21 +1,31 @@
 #include <iostream>
-#include "Block.h"
 
 #include <SFML/Graphics.hpp>
 
+#include "Defaults.h"
+#include "Draw/Block.h"
+#include "Draw/PointOfView.h"
+#include "Draw/Menu.h"
+
+
 using namespace std;
+
+
 
 sf::Vector2f ViewingLocation;
 sf::Vector2f dViewingLocation;
 sf::Vector2i LastMouseLocation;
 float Zoom = 2;
 
-void UpdateView(sf::RenderWindow * Window)
+void UpdateView(PointOfView* ViewToUpdate)
 {
     sf::View View(sf::FloatRect(ViewingLocation.x,ViewingLocation.y,
-                                Window->getSize().x, Window->getSize().y));
-    View.zoom(Zoom);
-    Window->setView(View);
+                                ViewToUpdate->WindowToRenderTo->getSize().x,
+                                ViewToUpdate->WindowToRenderTo->getSize().y));
+    ViewToUpdate->View.setCenter(ViewingLocation.x,ViewingLocation.y);
+    ViewToUpdate->View.setSize(ViewToUpdate->WindowToRenderTo->getSize().x,
+                               ViewToUpdate->WindowToRenderTo->getSize().y);
+    ViewToUpdate->View.zoom(Zoom);
 }
 
 int main ()
@@ -26,21 +36,21 @@ int main ()
     Backdrop.setSmooth(true);
     SetIconBackdrop(Backdrop);
 
-    sf::Texture Texture;
-    if (!Texture.loadFromFile("IconPlus.png", sf::IntRect(0,0,512,512)))
-    {
-        return -1;
-    }
-    Texture.setSmooth(true);
+    Block PlusBlock("IconPlus.png");
+    PlusBlock.SetPosition(sf::Vector2f(0, 0));
+    Block MinusBlock("IconMinus.png");
+    MinusBlock.SetPosition(sf::Vector2f(1024, 256));
 
-    sf::Sprite Sprite;
-    Sprite.setTexture(Texture);
-    Sprite.setOrigin(256, 256);
-    Sprite.move(256, 256);
+    PlusBlock.AddNextBlock(&MinusBlock);
 
-    Block Testblock(Sprite);
     sf::RenderWindow Window(sf::VideoMode(1600, 900), "My window");
-    UpdateView(&Window);
+    KNOW::DefaultWindow = &Window;
+
+    PointOfView BlockView;
+    BlockView.DisplayFunc = BlockDrawFunc;
+
+    UpdateView(&BlockView);
+
     while (Window.isOpen())
     {
         sf::Event Event;
@@ -48,7 +58,7 @@ int main ()
         {
             dViewingLocation = sf::Vector2f(sf::Mouse::getPosition() - LastMouseLocation);
             ViewingLocation -= dViewingLocation*Zoom;
-            UpdateView(&Window);
+            UpdateView(&BlockView);
         }
         LastMouseLocation = sf::Mouse::getPosition();
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
@@ -67,7 +77,7 @@ int main ()
                 {
                     Zoom *= 1.1;
                 }
-                UpdateView(&Window);
+                UpdateView(&BlockView);
             }
             if (Event.type == sf::Event::Closed)
             {
@@ -75,15 +85,12 @@ int main ()
             }
             if (Event.type == sf::Event::Resized)
             {
-                /*sf::View View(sf::FloatRect(0,0,Event.size.width, Event.size.height));
-                View.move(ViewingLocation);
-                Window.setView(View);*/
-                UpdateView(&Window);
+                UpdateView(&BlockView);
             }
         }
         CollisionCheck(&Window, sf::Vector2f(sf::Mouse::getPosition(Window)), Zoom);
         Window.clear(sf::Color(128, 128, 128));
-        BlockDisplayFunc(&Window);
+        POVDrawFunc();
         Window.display();
     }
 

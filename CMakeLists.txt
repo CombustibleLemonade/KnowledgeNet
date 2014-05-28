@@ -1,11 +1,8 @@
 cmake_minimum_required(VERSION 2.8)
 # Project Name
-PROJECT(SchoolEnhancementSystem)
-
+PROJECT(KnowledgeNet)
 
 #Extending the module database
-
-
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/CMake/Modules")
 
 #########################################################
@@ -25,9 +22,13 @@ include_directories(${SFML_INCLUDE_DIR})
 SET(CMAKE_CXX_FLAGS "-std=c++0x")
 
 include_directories(${CMAKE_SOURCE_DIR}/Common)
+include_directories(${CMAKE_SOURCE_DIR}/Scripts)
 add_executable(KnowledgeNet
-        Scripts/Main.cpp
-        Scripts/Block.cpp)
+        Scripts/Main/Main.cpp
+        Scripts/Defaults.cpp
+        Scripts/Draw/Block.cpp
+        Scripts/Draw/PointOfView.cpp
+        Scripts/Draw/Menu.cpp)
 
 ########################################################
 # Linking & stuff
