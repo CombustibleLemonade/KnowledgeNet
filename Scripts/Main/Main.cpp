@@ -30,6 +30,8 @@ void UpdateView(PointOfView* ViewToUpdate)
 
 int main ()
 {
+    KNOW::DefaultFont->loadFromFile("PixelatedFont/SFPixelate-Bold.ttf");
+
     sf::Texture Backdrop;
     if (!Backdrop.loadFromFile("Backdrop.png", sf::IntRect(0,0,512,512)))
         return -1;
@@ -43,15 +45,16 @@ int main ()
 
     PlusBlock.AddNextBlock(&MinusBlock);
 
-    sf::RenderWindow Window(sf::VideoMode(1600, 900), "My window");
-    KNOW::DefaultWindow = &Window;
-
     PointOfView BlockView;
     BlockView.DisplayFunc = BlockDrawFunc;
 
+    Menu TestMenu;
+    PointOfView MenuPOV;
+    MenuPOV.DisplayFunc = MenuDrawFunc;
+
     UpdateView(&BlockView);
 
-    while (Window.isOpen())
+    while (KNOW::DefaultWindow.isOpen())
     {
         sf::Event Event;
         if (sf::Mouse::isButtonPressed(sf::Mouse::Middle))
@@ -63,9 +66,9 @@ int main ()
         LastMouseLocation = sf::Mouse::getPosition();
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
         {
-            Window.close();
+            KNOW::DefaultWindow.close();
         }
-        while (Window.pollEvent(Event))
+        while (KNOW::DefaultWindow.pollEvent(Event))
         {
             if (Event.type == sf::Event::MouseWheelMoved)
             {
@@ -81,18 +84,19 @@ int main ()
             }
             if (Event.type == sf::Event::Closed)
             {
-                Window.close();
+                KNOW::DefaultWindow.close();
             }
             if (Event.type == sf::Event::Resized)
             {
                 UpdateView(&BlockView);
             }
         }
-        CollisionCheck(&Window, sf::Vector2f(sf::Mouse::getPosition(Window)), Zoom);
-        Window.clear(sf::Color(128, 128, 128));
+        CollisionCheck(&KNOW::DefaultWindow,
+                       sf::Vector2f(sf::Mouse::getPosition(KNOW::DefaultWindow)),
+                       Zoom);
+        KNOW::DefaultWindow.clear(sf::Color(128, 128, 128));
         POVDrawFunc();
-        Window.display();
+        KNOW::DefaultWindow.display();
     }
-
     return 0;
 }

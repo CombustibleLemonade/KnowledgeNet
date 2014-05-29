@@ -1,10 +1,13 @@
 #ifndef DEFAULT_VALUES
 #define DEFAULT_VALUES
 
-class KNOW
-{
-public:
-    static sf::RenderWindow* DefaultWindow;
-};
+#include "Draw/PointOfView.h"
+
+namespace KNOW {
+    extern sf::RenderWindow DefaultWindow;
+    extern sf::Font* DefaultFont;
+    extern PointOfView* BlockPOV;
+    extern PointOfView MenuPOV;
+}
 
 #endif

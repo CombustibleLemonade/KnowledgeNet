@@ -99,6 +99,7 @@ Block::Block(sf::String FileLocation)
     Icon.setOrigin(256, 256);
     BackdropSprite.setTexture(Backdrop);
     BackdropSprite.setOrigin(256, 256);
+    BackdropSprite.setColor(sf::Color(64, 64, 64));
 
 }
 

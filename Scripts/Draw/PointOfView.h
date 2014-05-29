@@ -6,12 +6,14 @@
 class PointOfView
 {
 public:
-    sf::RenderWindow * WindowToRenderTo;
     PointOfView();
-    void OnDisplay();
 
-    void  (*DisplayFunc) (sf::RenderWindow* Window);
+    bool DoesDisplay;
+    sf::RenderWindow * WindowToRenderTo;
     sf::View View;
+
+    void OnDisplay();
+    void  (*DisplayFunc) (sf::RenderWindow* Window);
 };
 
 void POVDrawFunc();

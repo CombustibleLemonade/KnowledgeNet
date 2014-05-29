@@ -7,8 +7,9 @@ std::vector<PointOfView*> AllPOVs;
 
 PointOfView::PointOfView ()
 {
-    WindowToRenderTo = KNOW::DefaultWindow;
+    WindowToRenderTo = &KNOW::DefaultWindow;
     AllPOVs.push_back(this);
+    DoesDisplay = true;
 }
 
 void PointOfView::OnDisplay()
