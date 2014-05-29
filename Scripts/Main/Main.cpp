@@ -48,9 +48,9 @@ int main ()
     PointOfView BlockView;
     BlockView.DisplayFunc = BlockDrawFunc;
 
-    Menu TestMenu;
-    PointOfView MenuPOV;
-    MenuPOV.DisplayFunc = MenuDrawFunc;
+    //Menu TestMenu;
+    //PointOfView MenuPOV;
+    //MenuPOV.DisplayFunc = MenuDrawFunc;
 
     UpdateView(&BlockView);
 
@@ -91,11 +91,12 @@ int main ()
                 UpdateView(&BlockView);
             }
         }
+        KNOW::DefaultWindow.clear(sf::Color(128, 128, 128));
+        POVDrawFunc();
         CollisionCheck(&KNOW::DefaultWindow,
                        sf::Vector2f(sf::Mouse::getPosition(KNOW::DefaultWindow)),
                        Zoom);
-        KNOW::DefaultWindow.clear(sf::Color(128, 128, 128));
-        POVDrawFunc();
+
         KNOW::DefaultWindow.display();
     }
     return 0;
