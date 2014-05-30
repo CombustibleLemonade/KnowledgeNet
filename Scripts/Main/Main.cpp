@@ -19,9 +19,6 @@ float Zoom = 2;
 
 void UpdateView(PointOfView* ViewToUpdate)
 {
-    sf::View View(sf::FloatRect(ViewingLocation.x,ViewingLocation.y,
-                                ViewToUpdate->WindowToRenderTo->getSize().x,
-                                ViewToUpdate->WindowToRenderTo->getSize().y));
     ViewToUpdate->View.setCenter(ViewingLocation.x,ViewingLocation.y);
     ViewToUpdate->View.setSize(ViewToUpdate->WindowToRenderTo->getSize().x,
                                ViewToUpdate->WindowToRenderTo->getSize().y);
@@ -45,12 +42,12 @@ int main ()
 
     PlusBlock.AddNextBlock(&MinusBlock);
 
+    Menu TestMenu;
+    PointOfView MenuPOV;
+    MenuPOV.DisplayFunc = MenuDrawFunc;
+
     PointOfView BlockView;
     BlockView.DisplayFunc = BlockDrawFunc;
-
-    //Menu TestMenu;
-    //PointOfView MenuPOV;
-    //MenuPOV.DisplayFunc = MenuDrawFunc;
 
     UpdateView(&BlockView);
 

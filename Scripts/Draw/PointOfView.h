@@ -8,6 +8,8 @@ class PointOfView
 public:
     PointOfView();
 
+    sf::Vector2f Location;
+
     bool DoesDisplay;
     sf::RenderWindow * WindowToRenderTo;
     sf::View View;
