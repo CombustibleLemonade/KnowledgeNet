@@ -2,6 +2,7 @@
 
 #include <SFML/Graphics.hpp>
 
+#include "Base/Base.h"
 #include "Defaults.h"
 #include "Draw/Block.h"
 #include "Draw/PointOfView.h"
@@ -10,7 +11,9 @@
 
 using namespace std;
 
+bool BlockViewDrag = false;
 
+sf::Vector2f MouseLocation;
 
 sf::Vector2f ViewingLocation;
 sf::Vector2f dViewingLocation;
@@ -56,6 +59,7 @@ int main ()
         sf::Event Event;
         if (sf::Mouse::isButtonPressed(sf::Mouse::Middle))
         {
+            //KNOW::TrackMovement (ViewingLocation, &BlockViewDrag, sf::Mouse::getPosition())
             dViewingLocation = sf::Vector2f(sf::Mouse::getPosition() - LastMouseLocation);
             ViewingLocation -= dViewingLocation*Zoom;
             UpdateView(&BlockView);
@@ -88,6 +92,7 @@ int main ()
                 UpdateView(&BlockView);
             }
         }
+        KNOW::BaseDrawFunc();
         KNOW::DefaultWindow.clear(sf::Color(128, 128, 128));
         POVDrawFunc();
         CollisionCheck(&KNOW::DefaultWindow,
