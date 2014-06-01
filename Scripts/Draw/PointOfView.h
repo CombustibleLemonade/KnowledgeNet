@@ -8,6 +8,7 @@ class PointOfView
 public:
     PointOfView();
 
+    float Zoom;
     sf::Vector2f Location;
 
     bool DoesDisplay;

@@ -11,6 +11,7 @@ MenuItem::MenuItem(const char *TextArg)
     FontToUse = KNOW::DefaultFont;
     Text.setString(TextArg);
     Text.setFont(*FontToUse);
+    Text.setOrigin(Text.getGlobalBounds().width/2, 0);
 }
 
 void MenuItem::OnDisplay(sf::RenderWindow * Window)

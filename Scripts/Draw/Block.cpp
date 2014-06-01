@@ -2,6 +2,8 @@
 #include <vector>
 #include <math.h>
 
+#include "Defaults.h"
+#include "PointOfView.h"
 #include "Block.h"
 
 std::vector<Connector*> AllConnectors;
@@ -160,14 +162,15 @@ void SetIconBackdrop(sf::Texture NewBackdrop) {
     Backdrop = NewBackdrop;
 }
 
-void CollisionCheck(sf::RenderWindow* Window, sf::Vector2f Location, float Zoom)
+void CollisionCheck(PointOfView* POV, sf::Vector2f Location, float Zoom)
 {
     int i = 0;
     sf::Vector2f TrueLocation = (Location -
-                                 (sf::Vector2f(Window->getSize())/2.0f))*Zoom;
-    TrueLocation += sf::Vector2f(Window->getView().getCenter());
+                                 (sf::Vector2f(KNOW::DefaultWindow.getSize())/2.0f))*Zoom;
+    TrueLocation += sf::Vector2f(POV->View.getCenter());
     TrueLocation.y = - TrueLocation.y;
 
+    //std::cout << Window->getView().getCenter().x << " " << Window->getView().getCenter().y << std::endl;
     while (i<AllBlocks.size())
     {
         AllBlocks[i]->CollisionCheck(TrueLocation);

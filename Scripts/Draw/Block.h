@@ -53,6 +53,6 @@ public:
 
 void BlockDrawFunc(sf::RenderWindow* Window);
 void SetIconBackdrop(sf::Texture Backdrop);
-void CollisionCheck(sf::RenderWindow* Window, sf::Vector2f Location, float Zoom);
+void CollisionCheck(PointOfView* POV, sf::Vector2f Location, float Zoom);
 
 #endif

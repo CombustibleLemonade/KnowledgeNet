@@ -25,7 +25,7 @@ void UpdateView(PointOfView* ViewToUpdate)
     ViewToUpdate->View.setCenter(ViewingLocation.x,ViewingLocation.y);
     ViewToUpdate->View.setSize(ViewToUpdate->WindowToRenderTo->getSize().x,
                                ViewToUpdate->WindowToRenderTo->getSize().y);
-    ViewToUpdate->View.zoom(Zoom);
+    ViewToUpdate->View.zoom(ViewToUpdate->Zoom);
 }
 
 int main ()
@@ -46,11 +46,14 @@ int main ()
     PlusBlock.AddNextBlock(&MinusBlock);
 
     Menu TestMenu;
-    PointOfView MenuPOV;
-    MenuPOV.DisplayFunc = MenuDrawFunc;
 
     PointOfView BlockView;
+    KNOW::BlockPOV = &BlockView;
     BlockView.DisplayFunc = BlockDrawFunc;
+
+    PointOfView MenuPOV;
+    KNOW::MenuPOV = &MenuPOV;
+    MenuPOV.DisplayFunc = MenuDrawFunc;
 
     UpdateView(&BlockView);
 
@@ -59,9 +62,8 @@ int main ()
         sf::Event Event;
         if (sf::Mouse::isButtonPressed(sf::Mouse::Middle))
         {
-            //KNOW::TrackMovement (ViewingLocation, &BlockViewDrag, sf::Mouse::getPosition())
             dViewingLocation = sf::Vector2f(sf::Mouse::getPosition() - LastMouseLocation);
-            ViewingLocation -= dViewingLocation*Zoom;
+            ViewingLocation -= dViewingLocation*BlockView.Zoom;
             UpdateView(&BlockView);
         }
         LastMouseLocation = sf::Mouse::getPosition();
@@ -75,11 +77,11 @@ int main ()
             {
                 if (Event.mouseWheel.delta == 1)
                 {
-                    Zoom /= 1.1;
+                    BlockView.Zoom /= 1.1;
                 }
                 else
                 {
-                    Zoom *= 1.1;
+                    BlockView.Zoom *= 1.1;
                 }
                 UpdateView(&BlockView);
             }
@@ -95,10 +97,9 @@ int main ()
         KNOW::BaseDrawFunc();
         KNOW::DefaultWindow.clear(sf::Color(128, 128, 128));
         POVDrawFunc();
-        CollisionCheck(&KNOW::DefaultWindow,
+        CollisionCheck(KNOW::BlockPOV,
                        sf::Vector2f(sf::Mouse::getPosition(KNOW::DefaultWindow)),
-                       Zoom);
-
+                       BlockView.Zoom);
         KNOW::DefaultWindow.display();
     }
     return 0;

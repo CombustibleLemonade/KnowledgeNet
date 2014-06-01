@@ -11,11 +11,12 @@ public:
     MenuItem(const char* TextArg);
 
     sf::Font * FontToUse;
+
     sf::Text Text;
 
     void SetText(const char* TextArg);
-    void OnDisplay(sf::RenderWindow * Window);
 
+    void OnDisplay(sf::RenderWindow * Window);
 };
 
 class Menu
