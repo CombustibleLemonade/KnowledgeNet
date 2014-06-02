@@ -54,13 +54,15 @@ int main ()
     PointOfView MenuPOV;
     KNOW::MenuPOV = &MenuPOV;
     MenuPOV.DisplayFunc = MenuDrawFunc;
+    MenuPOV.DoesDisplay = false;
 
+    UpdateView(&MenuPOV);
     UpdateView(&BlockView);
 
     while (KNOW::DefaultWindow.isOpen())
     {
         sf::Event Event;
-        if (sf::Mouse::isButtonPressed(sf::Mouse::Middle))
+        if (sf::Mouse::isButtonPressed(sf::Mouse::Middle) && !KNOW::DisplayMenu)
         {
             dViewingLocation = sf::Vector2f(sf::Mouse::getPosition() - LastMouseLocation);
             ViewingLocation -= dViewingLocation*BlockView.Zoom;
@@ -69,11 +71,12 @@ int main ()
         LastMouseLocation = sf::Mouse::getPosition();
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
         {
-            KNOW::DefaultWindow.close();
+            //KNOW::DefaultWindow.close();
+
         }
         while (KNOW::DefaultWindow.pollEvent(Event))
         {
-            if (Event.type == sf::Event::MouseWheelMoved)
+            if (Event.type == sf::Event::MouseWheelMoved && !KNOW::DisplayMenu)
             {
                 if (Event.mouseWheel.delta == 1)
                 {
@@ -84,6 +87,14 @@ int main ()
                     BlockView.Zoom *= 1.1;
                 }
                 UpdateView(&BlockView);
+            }
+            if (Event.type == sf::Event::KeyPressed)
+            {
+                if (Event.key.code == sf::Keyboard::Escape)
+                {
+                    KNOW::DisplayMenu = !KNOW::DisplayMenu;
+                    KNOW::MenuPOV->DoesDisplay = KNOW::DisplayMenu;
+                }
             }
             if (Event.type == sf::Event::Closed)
             {
@@ -97,9 +108,16 @@ int main ()
         KNOW::BaseDrawFunc();
         KNOW::DefaultWindow.clear(sf::Color(128, 128, 128));
         POVDrawFunc();
-        CollisionCheck(KNOW::BlockPOV,
-                       sf::Vector2f(sf::Mouse::getPosition(KNOW::DefaultWindow)),
-                       BlockView.Zoom);
+        if (!KNOW::DisplayMenu)
+        {
+            BlockCollisionCheck(KNOW::BlockPOV,
+                           sf::Vector2f(sf::Mouse::getPosition(KNOW::DefaultWindow)),
+                           BlockView.Zoom);
+        }
+        else if (KNOW::DisplayMenu)
+        {
+            MenuCollisionCheck(&KNOW::DefaultWindow);
+        }
         KNOW::DefaultWindow.display();
     }
     return 0;

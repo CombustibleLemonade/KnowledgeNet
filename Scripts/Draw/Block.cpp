@@ -162,7 +162,7 @@ void SetIconBackdrop(sf::Texture NewBackdrop) {
     Backdrop = NewBackdrop;
 }
 
-void CollisionCheck(PointOfView* POV, sf::Vector2f Location, float Zoom)
+void BlockCollisionCheck(PointOfView* POV, sf::Vector2f Location, float Zoom)
 {
     int i = 0;
     sf::Vector2f TrueLocation = (Location -

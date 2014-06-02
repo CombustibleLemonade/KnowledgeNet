@@ -8,4 +8,5 @@ namespace KNOW {
     sf::Font* DefaultFont = new sf::Font;
     PointOfView* BlockPOV;
     PointOfView* MenuPOV;
+    bool DisplayMenu;
 }

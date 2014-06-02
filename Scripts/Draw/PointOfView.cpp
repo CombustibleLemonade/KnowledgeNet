@@ -7,7 +7,7 @@ std::vector<PointOfView*> AllPOVs;
 
 PointOfView::PointOfView ()
 {
-    Zoom = 2;
+    Zoom = 1;
     WindowToRenderTo = &KNOW::DefaultWindow;
     AllPOVs.push_back(this);
     DoesDisplay = true;
@@ -24,7 +24,10 @@ void POVDrawFunc()
     int i = 0;
     while (i<AllPOVs.size())
     {
-        AllPOVs[i]->OnDisplay();
+        if (AllPOVs[i]->DoesDisplay)
+        {
+            AllPOVs[i]->OnDisplay();
+        }
         i++;
     }
 }

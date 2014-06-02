@@ -8,27 +8,33 @@ class MenuItem
 {
 public:
     MenuItem();
-    MenuItem(const char* TextArg);
+
+    virtual void OnDisplay(sf::RenderWindow * Window, sf::Transform Transform);
+};
+
+class TextMenuItem: public MenuItem
+{
+public:
+    TextMenuItem(const char* TextArg);
+
 
     sf::Font * FontToUse;
-
     sf::Text Text;
 
-    void SetText(const char* TextArg);
-
-    void OnDisplay(sf::RenderWindow * Window);
+    void OnDisplay(sf::RenderWindow * Window, sf::Transform Transform);
 };
 
 class Menu
 {
 public:
-    std::vector<MenuItem> MenuItems;
+    std::vector<MenuItem*> MenuItems;
     Menu();
     bool Display;
-    sf::Vector2f TopLeftPosition;
     void OnDisplay(sf::RenderWindow * Window);
 };
 
 void MenuDrawFunc(sf::RenderWindow * Window);
+
+void MenuCollisionCheck(sf::RenderWindow * Window);
 
 #endif
