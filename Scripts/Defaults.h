@@ -7,7 +7,6 @@ namespace KNOW {
     extern sf::RenderWindow DefaultWindow;
     extern sf::Font* DefaultFont;
     extern PointOfView* BlockPOV;
-    extern PointOfView* MenuPOV;
     extern bool DisplayMenu;
 }
 

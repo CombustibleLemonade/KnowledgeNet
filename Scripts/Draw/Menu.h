@@ -4,6 +4,17 @@
 #include <string>
 #include <SFML/Graphics.hpp>
 
+#include "PointOfView.h"
+
+class Menu;
+
+class MenuPOV : public PointOfView
+{
+public:
+    Menu* MenuOfThisPOV;
+    void OnDisplay();
+};
+
 class MenuItem
 {
 public:
@@ -29,8 +40,10 @@ class Menu
 public:
     std::vector<MenuItem*> MenuItems;
     Menu();
+    MenuPOV POV;
     bool Display;
     void OnDisplay(sf::RenderWindow * Window);
+    bool CollisionCheck(sf::RenderWindow* Window);
 };
 
 void MenuDrawFunc(sf::RenderWindow * Window);

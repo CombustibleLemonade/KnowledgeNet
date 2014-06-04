@@ -5,8 +5,12 @@
 
 std::vector<PointOfView*> AllPOVs;
 
+void DefaultPOVDisplayFunc(sf::RenderWindow* Window)
+{}
+
 PointOfView::PointOfView ()
 {
+    DisplayFunc = DefaultPOVDisplayFunc;
     Zoom = 1;
     WindowToRenderTo = &KNOW::DefaultWindow;
     AllPOVs.push_back(this);

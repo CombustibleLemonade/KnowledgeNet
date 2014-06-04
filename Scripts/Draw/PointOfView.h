@@ -15,7 +15,7 @@ public:
     sf::RenderWindow * WindowToRenderTo;
     sf::View View;
 
-    void OnDisplay();
+    virtual void OnDisplay();
     void  (*DisplayFunc) (sf::RenderWindow* Window);
 };
 

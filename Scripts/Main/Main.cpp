@@ -52,7 +52,6 @@ int main ()
     BlockView.DisplayFunc = BlockDrawFunc;
 
     PointOfView MenuPOV;
-    KNOW::MenuPOV = &MenuPOV;
     MenuPOV.DisplayFunc = MenuDrawFunc;
     MenuPOV.DoesDisplay = false;
 
@@ -93,7 +92,7 @@ int main ()
                 if (Event.key.code == sf::Keyboard::Escape)
                 {
                     KNOW::DisplayMenu = !KNOW::DisplayMenu;
-                    KNOW::MenuPOV->DoesDisplay = KNOW::DisplayMenu;
+                    //KNOW::MenuPOV->DoesDisplay = KNOW::DisplayMenu;
                 }
             }
             if (Event.type == sf::Event::Closed)
