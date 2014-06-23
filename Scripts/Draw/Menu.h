@@ -1,53 +1,69 @@
 #ifndef MENU_DRAWING
 #define MENU_DRAWING
 
-#include <string>
+#include <vector>
 #include <SFML/Graphics.hpp>
-
 #include "PointOfView.h"
 
-class Menu;
+namespace KNOW{
+    class MenuRow;
 
-class MenuPOV : public PointOfView
-{
-public:
-    Menu* MenuOfThisPOV;
-    void OnDisplay();
-};
+    /* Single GUI element in menus. Inherited classes can display links to
+     * other MenuRows, sliders, checkboxes, etc. */
+    class MenuItem
+    {
+        int Offset;
+        virtual void OnCollision();
+        virtual void OnCollisionEntry();
+        virtual void OnCollisionExit();
+    protected:
+        bool Collide;
+        MenuRow* Parent;
+    public:
+        sf::Transformable Transformable;
+        MenuItem();
+        virtual void OnDisplay(int i);
+    };
 
-class MenuItem
-{
-public:
-    MenuItem();
+    /* Inherited class which displays a piece of text, which will open a
+     * new MenuRow upon beeing clicked.*/
+    class MenuItemLink: public MenuItem
+    {
+        bool PreviousLMBPressed;
 
-    virtual void OnDisplay(sf::RenderWindow * Window, sf::Transform Transform);
-};
+        virtual void OnCollision();
+        virtual void OnCollisionEntry();
+        virtual void OnCollisionExit();
+    public:
+        sf::Text Transformable;
+        MenuItemLink();
+        MenuItemLink(const char* Text);
+        void OnDisplay(int i);
+    };
 
-class TextMenuItem: public MenuItem
-{
-public:
-    TextMenuItem(const char* TextArg);
+    /* Row of MenuItems to display */
+    class MenuRow
+    {
+        bool ActiveMenu;
+    protected:
+        int RowIterator;
+    public:
+        KNOW::View MenuRowView;
+        MenuRow();
+        std::vector<MenuItem*> MenuItems;
+        void OnDisplay();
+    };
 
-
-    sf::Font * FontToUse;
-    sf::Text Text;
-
-    void OnDisplay(sf::RenderWindow * Window, sf::Transform Transform);
-};
-
-class Menu
-{
-public:
-    std::vector<MenuItem*> MenuItems;
-    Menu();
-    MenuPOV POV;
-    bool Display;
-    void OnDisplay(sf::RenderWindow * Window);
-    bool CollisionCheck(sf::RenderWindow* Window);
-};
-
-void MenuDrawFunc(sf::RenderWindow * Window);
-
-void MenuCollisionCheck(sf::RenderWindow * Window);
+    /* Collection of MenuRows forming a Menu */
+    class Menu
+    {
+        friend class MenuRow;
+        std::vector<MenuRow*> MenuRows;
+        void PrivateOnDisplay();
+    public:
+        static void OnDisplay();
+        Menu();
+    };
+}
 
 #endif

@@ -1,37 +1,28 @@
+#include <iostream>
+
 #include <vector>
 
 #include "PointOfView.h"
-#include "Defaults.h"
+#include "Base/Defaults.h"
 
-std::vector<PointOfView*> AllPOVs;
+std::vector<KNOW::View*> AllViews;
 
-void DefaultPOVDisplayFunc(sf::RenderWindow* Window)
-{}
-
-PointOfView::PointOfView ()
+namespace KNOW
 {
-    DisplayFunc = DefaultPOVDisplayFunc;
-    Zoom = 1;
-    WindowToRenderTo = &KNOW::DefaultWindow;
-    AllPOVs.push_back(this);
-    DoesDisplay = true;
-}
-
-void PointOfView::OnDisplay()
-{
-    WindowToRenderTo->setView(View);
-    (*DisplayFunc)(WindowToRenderTo);
-}
-
-void POVDrawFunc()
-{
-    int i = 0;
-    while (i<AllPOVs.size())
+    View::View()
     {
-        if (AllPOVs[i]->DoesDisplay)
-        {
-            AllPOVs[i]->OnDisplay();
+        ZoomValue = 1;
+        AllViews.push_back(this);
+    }
+
+    void View::OnDisplay(){
+        for (int i = 0; i<AllViews.size(); i++){
+            AllViews[i]->AdjustToScreenRes();
         }
-        i++;
+    }
+
+    void View::AdjustToScreenRes(){
+        setSize(sf::Vector2f(KNOW::DefaultWindow.getSize()));
+        zoom(ZoomValue);
     }
 }

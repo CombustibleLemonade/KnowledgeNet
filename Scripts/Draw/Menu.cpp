@@ -1,78 +1,129 @@
 #include "Menu.h"
-#include "Defaults.h"
+#include "Base/Defaults.h"
+#include "Base/Base.h"
+
 #include <iostream>
+#include <ostream>
+#include <sstream>
 
-std::vector<Menu*> Menus;
+#include <string>
+std::vector<KNOW::Menu*> Menus;
 
-void MenuPOV::OnDisplay()
-{
-    MenuOfThisPOV->OnDisplay(&KNOW::DefaultWindow);
-}
+namespace KNOW{
+    MenuItem::MenuItem()
+    {}
 
-Menu MainMenu;
+    /* OnDisplay gets called everytime a frame is drawn. */
+    void MenuItem::OnDisplay(int i)
+    {}
 
-MenuItem::MenuItem()
-{}
+    void MenuItem::OnCollision()
+    {}
 
-void MenuItem::OnDisplay(sf::RenderWindow * Window, sf::Transform Transform)
-{}
+    void MenuItem::OnCollisionEntry()
+    {}
 
-TextMenuItem::TextMenuItem(const char *TextArg)
-{
-    FontToUse = KNOW::DefaultFont;
-    Text.setString(TextArg);
-    Text.setFont(*FontToUse);
-    Text.setOrigin(Text.getGlobalBounds().width/2,
-                   Text.getGlobalBounds().height);
-}
+    void MenuItem::OnCollisionExit()
+    {}
 
-void TextMenuItem::OnDisplay(sf::RenderWindow *Window, sf::Transform Transform)
-{
-    Window->draw(Text);
-}
-
-Menu::Menu()
-{
-    MenuItems.push_back(new TextMenuItem("Test"));
-    Menus.push_back(this);
-    POV.MenuOfThisPOV = this;
-}
-
-void Menu::OnDisplay(sf::RenderWindow *Window)
-{
-    int i = 0;
-
-    int Last;
-    if (i == 0) Last = MenuItems.size();
-    else Last = i-1;
-
-    sf::Transform Transform;
-    while (i<MenuItems.size())
+    MenuItemLink::MenuItemLink()
     {
-        MenuItems[i]->OnDisplay(Window, Transform);
-        i++;
+        Transformable.setFont(KNOW::DefaultFont);
     }
-}
 
-bool Menu::CollisionCheck(sf::RenderWindow *Window)
-{}
-
-void MenuDrawFunc(sf::RenderWindow* Window)
-{
-    int i = 0;
-    while (i<Menus.size())
+    MenuItemLink::MenuItemLink(const char *Text)
     {
-        Menus[i]->OnDisplay(Window);
-        i++;
+        Transformable.setFont(KNOW::DefaultFont);
+        Transformable.setString(Text);
     }
-}
 
-void MenuCollisionCheck(sf::RenderWindow *Window)
-{
-    int i = 0;
-    while (i<Menus.size())
+    void MenuItemLink::OnDisplay(int i)
     {
-        Menus[i]->CollisionCheck(Window);
-        i++;
+        bool PrevCollide = Collide;
+        Collide = KNOW::CursorCollisionCheck(Transformable.getGlobalBounds());
+        Transformable.setOrigin(floor(Transformable.getGlobalBounds().width/2),
+                                floor(Transformable.getGlobalBounds().height/2));
+        Transformable.setPosition(0, i*40);
+
+        if (Collide)
+        {
+            OnCollision();
+            if (!PrevCollide)
+            {
+                OnCollisionEntry();
+            }
+        }
+        else if (PrevCollide)
+        {
+            OnCollisionExit();
+        }
+        PreviousLMBPressed = sf::Mouse::isButtonPressed(sf::Mouse::Left);
+        KNOW::DefaultWindow.draw(Transformable);
+    }
+
+    void MenuItemLink::OnCollision()
+    {
+        bool LMBPressed = sf::Mouse::isButtonPressed(sf::Mouse::Left);
+        if (LMBPressed && !PreviousLMBPressed)
+        {
+            std::cout << this << std::endl;
+        }
+    }
+
+    void MenuItemLink::OnCollisionEntry()
+    {
+        Transformable.setColor(sf::Color(255, 0, 0));
+    }
+
+    void MenuItemLink::OnCollisionExit()
+    {
+        Transformable.setColor(sf::Color(255, 255, 255));
+    }
+
+    MenuRow::MenuRow()
+    {
+        MenuRowView.setCenter(0,0);
+        MenuRowView.AdjustToScreenRes();
+
+        for (int i = 0; i < 10; i++){
+            MenuItems.push_back(new KNOW::MenuItemLink("Test"));
+        }
+    }
+
+    void MenuRow::OnDisplay()
+    {
+        int ViewTop = fmin(MenuItems.size()*20,
+                           MenuRowView.getSize().y/2-50);
+        if(MenuRowView.getCenter().x<ViewTop)
+        {
+            MenuRowView.setCenter(0, ViewTop);
+        }
+        KNOW::DefaultWindow.setView(MenuRowView);
+        for(int i = 0; i < MenuItems.size(); i++)
+        {
+            MenuItems[i]->OnDisplay(i);
+        }
+    }
+
+    void Menu::PrivateOnDisplay()
+    {
+        for (int i = 0; i < MenuRows.size(); i++)
+        {
+            MenuRows[i]->OnDisplay();
+        }
+    }
+
+    Menu::Menu()
+    {
+        Menus.push_back(this);
+        MenuRows.push_back(new KNOW::MenuRow());
+    }
+
+    void Menu::OnDisplay()
+    {
+        for (int i = 0; i < Menus.size(); i++)
+        {
+            Menus[i]->PrivateOnDisplay();
+        }
     }
 }

@@ -25,7 +25,7 @@ include_directories(${CMAKE_SOURCE_DIR}/Common)
 include_directories(${CMAKE_SOURCE_DIR}/Scripts)
 add_executable(KnowledgeNet
         Scripts/Main/Main.cpp
-        Scripts/Defaults.cpp
+        Scripts/Base/Defaults.cpp
         Scripts/Base/Base.cpp
         Scripts/Draw/Block.cpp
         Scripts/Draw/PointOfView.cpp

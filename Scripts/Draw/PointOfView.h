@@ -3,24 +3,18 @@
 
 #include <SFML/Graphics.hpp>
 
-class PointOfView
+namespace KNOW
 {
-public:
-    PointOfView();
-
-    float Zoom;
-    sf::Vector2f Location;
-
-    bool DoesDisplay;
-    sf::RenderWindow * WindowToRenderTo;
-    sf::View View;
-
-    virtual void OnDisplay();
-    void  (*DisplayFunc) (sf::RenderWindow* Window);
-};
-
-void POVDrawFunc();
-
-void ManageViews();
+    /* KNOW::View is a class which inherits from the sf::view class.*/
+    class View: public sf::View
+    {
+    public:
+        View();
+        static void OnDisplay();
+        sf::Vector2f Location;
+        float ZoomValue;
+        void AdjustToScreenRes();
+    };
+}
 
 #endif

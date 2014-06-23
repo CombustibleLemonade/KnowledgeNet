@@ -80,7 +80,7 @@
       </Build>
       <Unit filename="/home/jan/Documents/Programming/KnowledgeNet/Scripts/Base/Base.cpp">
       </Unit>
-      <Unit filename="/home/jan/Documents/Programming/KnowledgeNet/Scripts/Defaults.cpp">
+      <Unit filename="/home/jan/Documents/Programming/KnowledgeNet/Scripts/Base/Defaults.cpp">
       </Unit>
       <Unit filename="/home/jan/Documents/Programming/KnowledgeNet/Scripts/Draw/Block.cpp">
       </Unit>
@@ -92,7 +92,7 @@
       </Unit>
       <Unit filename="/home/jan/Documents/Programming/KnowledgeNet/Scripts/Base/Base.h">
       </Unit>
-      <Unit filename="/home/jan/Documents/Programming/KnowledgeNet/Scripts/Defaults.h">
+      <Unit filename="/home/jan/Documents/Programming/KnowledgeNet/Scripts/Base/Defaults.h">
       </Unit>
       <Unit filename="/home/jan/Documents/Programming/KnowledgeNet/Scripts/Draw/Block.h">
       </Unit>
