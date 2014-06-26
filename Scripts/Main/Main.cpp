@@ -8,17 +8,11 @@
 #include "Draw/PointOfView.h"
 #include "Draw/Menu.h"
 
-
-using namespace std;
-
 sf::Vector2i LastMouseLocation;
 
 int main ()
 {
     KNOW::DefaultFont.loadFromFile("PixelatedFont/SFPixelate-Bold.ttf");
-    KNOW::MenuView.setCenter(0.0, 0.0);
-    KNOW::MenuView.AdjustToScreenRes();
-    KNOW::DefaultWindow.setView(KNOW::MenuView);
 
     KNOW::Menu TestMenu;
 
@@ -53,8 +47,6 @@ int main ()
             {}
         }
         KNOW::DefaultWindow.clear(sf::Color(128, 128, 128));
-        KNOW::MenuView.AdjustToScreenRes();
-        KNOW::DefaultWindow.setView(KNOW::MenuView);
 
         KNOW::View::OnDisplay();
         KNOW::Menu::OnDisplay();

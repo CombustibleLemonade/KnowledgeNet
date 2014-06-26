@@ -6,7 +6,6 @@
 namespace KNOW {
     extern sf::RenderWindow DefaultWindow;
     extern sf::Font DefaultFont;
-    extern KNOW::View MenuView;
     extern bool DisplayMenu;
 }
 
