@@ -81,10 +81,10 @@ namespace KNOW{
     void MenuItemSlider::SliderBar::InitObjects()
     {
         Value = new float;
-        *Value = 0.9;
+        *Value = 50;
 
-        Min = 400;
-        Max = 800;
+        Min = 0;
+        Max = 100;
 
         LMBPressed = false;
 
@@ -93,6 +93,7 @@ namespace KNOW{
         BackgroundSprite.setPosition(0,0);
 
         TextDrawable.setFont(KNOW::DefaultFont);
+        ValueDisplay.setFont(KNOW::DefaultFont);
     }
 
     /* These functions are called when the cursor moves over the MenuItemSlider::SliderBar. */
@@ -133,7 +134,8 @@ namespace KNOW{
     void MenuItemSlider::SliderBar::OnDragExit()
     {
         IsSliding = false;
-        Rectangle.setFillColor(sf::Color(255, 255, 255));
+        if (!CursorCollisionCheck(Rectangle.getGlobalBounds()))
+            Rectangle.setFillColor(sf::Color(255, 255, 255));
     }
 
     /* Constructors for MenuItemSlider::SliderBar. */
@@ -153,26 +155,35 @@ namespace KNOW{
     /* This function fixes abstractness and gets called upon sf::RenderWindow::draw. */
     void MenuItemSlider::SliderBar::draw(sf::RenderTarget &target, sf::RenderStates states) const
     {
-        TextDrawable.setString(Text);
-
-        sf::FloatRect TextRect = TextDrawable.getGlobalBounds();
-        float TextHeight = TextRect.height;
-        TextDrawable.setOrigin(floor(TextRect.width),
-                                floor(TextHeight/2));
-        TextDrawable.setOrigin(TextDrawable.getOrigin());
-        TextDrawable.setPosition(getPosition());
-
-        BackgroundSprite.setPosition(getPosition());
-
-        target.draw(TextDrawable, states);
-        target.draw(BackgroundSprite, states);
-
         if (Value)
         {
             if (*Value<Min)
                 *Value = Min;
             else if (*Value > Max)
                 *Value = Max;
+        }
+        ValueDisplay.setString(std::to_string(int(*Value)) + "%");
+        sf::FloatRect TextRect = ValueDisplay.getGlobalBounds();
+        float TextHeight = TextRect.height;
+        ValueDisplay.setOrigin(0, floor(TextHeight/2));
+        ValueDisplay.setPosition(getPosition() + sf::Vector2f(310, 0));
+        //ValueDisplay.setColor(sf::Color(*Value*2.55, *Value*1.27, *Value*2.55));
+
+        TextDrawable.setString(Text);
+        TextRect = TextDrawable.getGlobalBounds();
+        TextHeight = TextRect.height;
+        TextDrawable.setOrigin(floor(TextRect.width),
+                               floor(TextHeight/2));
+        TextDrawable.setPosition(getPosition());
+
+        BackgroundSprite.setPosition(getPosition());
+
+        target.draw(TextDrawable, states);
+        target.draw(BackgroundSprite, states);
+        target.draw(ValueDisplay, states);
+
+        if (Value)
+        {
             Rectangle.setPosition(getPosition() +
                                   sf::Vector2f(CursorToSliderXPos(*Value), 0));
             Rectangle.setSize(sf::Vector2f(16, TextHeight));
@@ -290,9 +301,7 @@ namespace KNOW{
         int Distance = 0;
         for (int i = 0; i < MenuRows.size(); i++)
         {
-            if (i != 0)
-                Distance += MenuRows[i]->HorizontalSize/2;
-            MenuRows[i]->xLocation = Distance;
+            MenuRows[i]->xLocation = i*700;
             MenuRows[i]->OnDisplay();
             Distance += MenuRows[i]->HorizontalSize/2;
         }
@@ -303,6 +312,8 @@ namespace KNOW{
     {
         Menus.push_back(this);
         MenuRows.push_back(new KNOW::MenuRow());
+        MenuRows.push_back(new KNOW::MenuRow());
+
         MenuView.setCenter(0,0);
         MenuView.AdjustToScreenRes();
     }

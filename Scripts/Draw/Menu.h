@@ -46,6 +46,7 @@ namespace KNOW{
 
             const char* PreviousText;
             mutable sf::Text TextDrawable;
+            mutable sf::Text ValueDisplay;
             mutable sf::Sprite BackgroundSprite;
             mutable sf::RectangleShape Rectangle;
             void InitObjects();

@@ -38,6 +38,9 @@ int main ()
             {
                 if (Event.key.code == sf::Keyboard::Escape)
                 {KNOW::DefaultWindow.close();}
+                if (Event.key.code == sf::Keyboard::F1){
+                    KNOW::DisplayMenu = !KNOW::DisplayMenu;
+                }
             }
             if (Event.type == sf::Event::Closed)
             {
@@ -49,13 +52,13 @@ int main ()
         KNOW::DefaultWindow.clear(sf::Color(128, 128, 128));
 
         KNOW::View::OnDisplay();
-        KNOW::Menu::OnDisplay();
 
         if (!KNOW::DisplayMenu)
         {}
         else if (KNOW::DisplayMenu)
-        {}
-
+        {
+            KNOW::Menu::OnDisplay();
+        }
         KNOW::DefaultWindow.display();
     }
     return 0;
