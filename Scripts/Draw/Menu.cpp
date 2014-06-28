@@ -2,6 +2,7 @@
 #include "Base/Defaults.h"
 #include "Base/Base.h"
 
+#include <cmath>
 #include <iostream>
 #include <string>
 std::vector<KNOW::Menu*> Menus;
