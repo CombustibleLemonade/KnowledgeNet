@@ -10,13 +10,10 @@ std::vector<KNOW::Menu*> Menus;
 
 namespace KNOW{
     sf::Texture MenuItemSlider::SlideTexture;
+    MenuRow ActiveMenuRow;
 
     /* Virtual initializer*/
     MenuItem::MenuItem()
-    {}
-
-    /* This function is called upon a redisplay of the screen */
-    void MenuItem::OnDisplay()
     {}
 
     /* Initialize Transformable */
@@ -61,9 +58,10 @@ namespace KNOW{
     /* These functions are called when the cursor moves over the MenuItemLink. */
     void MenuItemLink::OnCollision()
     {
+        Next = new MenuRow;
         if (Next != NULL)
         {
-            Next->xLocation = 300;
+            Next->xLocation = 700;
             Next->OnDisplay();
         }
     }
@@ -296,25 +294,9 @@ namespace KNOW{
         }
     }
 
-    void Menu::PrivateOnDisplay()
-    {
-        KNOW::DefaultWindow.setView(MenuView);
-        int Distance = 0;
-        for (int i = 0; i < MenuRows.size(); i++)
-        {
-            MenuRows[i]->xLocation = i*700;
-            MenuRows[i]->OnDisplay();
-            Distance += MenuRows[i]->HorizontalSize/2;
-        }
-    }
-
     /* Constructor for Menu. */
     Menu::Menu()
     {
-        Menus.push_back(this);
-        MenuRows.push_back(new KNOW::MenuRow());
-        MenuRows.push_back(new KNOW::MenuRow());
-
         MenuView.setCenter(0,0);
         MenuView.AdjustToScreenRes();
     }
@@ -322,9 +304,7 @@ namespace KNOW{
     /* This function is called before each new frame is displayed. */
     void Menu::OnDisplay()
     {
-        for (int i = 0; i < Menus.size(); i++)
-        {
-            Menus[i]->PrivateOnDisplay();
-        }
+        KNOW::DefaultWindow.setView(MenuView);
+        BaseRow.OnDisplay();
     }
 }

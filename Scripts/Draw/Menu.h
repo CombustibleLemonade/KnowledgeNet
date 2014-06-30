@@ -17,7 +17,7 @@ namespace KNOW{
     public:
         sf::Transformable* Transformable;
         MenuItem();
-        virtual void OnDisplay();
+        virtual void OnDisplay() = 0;
     };
 
     /* Inherited class which displays a piece of text, which will open a
@@ -44,7 +44,7 @@ namespace KNOW{
         {
             friend class MenuItemSlider;
 
-            const char* PreviousText;
+            const char* Name;
             mutable sf::Text TextDrawable;
             mutable sf::Text ValueDisplay;
             mutable sf::Sprite BackgroundSprite;
@@ -99,6 +99,20 @@ namespace KNOW{
         void OnDisplay();
     };
 
+    class MenuItemTickBox: public MenuItem
+    {
+        class TickBox: public sf::Drawable, sf::Transformable
+        {
+            mutable sf::Text Name;
+            mutable sf::Sprite TickBoxCube;
+            mutable sf::Sprite TickBoxV;
+        public:
+            void draw(sf::RenderTarget& target, sf::RenderStates states)const;
+        };
+    public:
+        void OnDisplay();
+    };
+
     /* Row of MenuItems to display */
     class MenuRow
     {
@@ -120,15 +134,11 @@ namespace KNOW{
     /* Collection of MenuRows forming a Menu */
     class Menu
     {
-        std::vector<MenuRow*> MenuRows;
-        void PrivateOnDisplay();
-        static MenuRow* Focus;
+        MenuRow BaseRow;
     public:
         KNOW::View MenuView;
-        static void OnDisplay();
+        void OnDisplay();
         Menu();
-        void AddRow(MenuRow RowArg);
-        void PopRow();
     };
 }
 

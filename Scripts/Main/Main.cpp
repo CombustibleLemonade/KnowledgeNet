@@ -59,7 +59,7 @@ int main ()
         {}
         else if (KNOW::DisplayMenu)
         {
-            KNOW::Menu::OnDisplay();
+            TestMenu.OnDisplay();
         }
         KNOW::DefaultWindow.display();
     }
