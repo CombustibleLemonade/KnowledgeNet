@@ -16,6 +16,8 @@ int main ()
 
     KNOW::Menu TestMenu;
 
+    KNOW::View Viewer;
+
     while (KNOW::DefaultWindow.isOpen())
     {
         sf::Event Event;

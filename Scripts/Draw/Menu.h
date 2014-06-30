@@ -122,10 +122,13 @@ namespace KNOW{
     {
         std::vector<MenuRow*> MenuRows;
         void PrivateOnDisplay();
+        static MenuRow* Focus;
     public:
         KNOW::View MenuView;
         static void OnDisplay();
         Menu();
+        void AddRow(MenuRow RowArg);
+        void PopRow();
     };
 }
 
