@@ -5,10 +5,12 @@
 #include "PointOfView.h"
 #include "Base/Defaults.h"
 
-std::vector<KNOW::View*> AllViews;
-
 namespace KNOW
 {
+
+    std::vector<KNOW::View*> AllViews;
+
+
     View::View()
     {
         ZoomValue = 1;
@@ -16,7 +18,8 @@ namespace KNOW
     }
 
     void View::OnDisplay(){
-        for (int i = 0; i<AllViews.size(); i++){
+        for (int i = 0; i<AllViews.size(); i++)
+        {
             AllViews[i]->AdjustToScreenRes();
         }
     }
@@ -25,4 +28,7 @@ namespace KNOW
         setSize(sf::Vector2f(KNOW::DefaultWindow.getSize()));
         zoom(ZoomValue);
     }
+
+    void View::SetTargetPosition(sf::Vector2f TargetPosition)
+    {}
 }

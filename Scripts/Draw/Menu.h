@@ -1,6 +1,7 @@
 #ifndef MENU_DRAWING
 #define MENU_DRAWING
 
+#include <functional>
 #include <vector>
 #include <SFML/Graphics.hpp>
 #include "PointOfView.h"
@@ -18,12 +19,14 @@ namespace KNOW{
         sf::Transformable* Transformable;
         MenuItem();
         virtual void OnDisplay() = 0;
+        virtual void OnCollisionCheck();
     };
 
     /* Inherited class which displays a piece of text, which will open a
      * new MenuRow upon beeing clicked.*/
     class MenuItemLink: public MenuItem
     {
+        bool DisplayNext;
         bool PreviousLMBPressed;
         void OnCollision();
         void OnCollisionEntry();
@@ -34,6 +37,7 @@ namespace KNOW{
         MenuItemLink();
         MenuItemLink(const char* Text);
         void OnDisplay();
+        void OnCollisionCheck();
     };
 
     /* Inherited class which displays a slider which can adjust a float
@@ -92,6 +96,7 @@ namespace KNOW{
         static bool BackgroundTextureInitialized;
     public:
         static sf::Texture SlideTexture;
+        float* Value;
 
         const char * Text;
         MenuItemSlider();
@@ -99,24 +104,58 @@ namespace KNOW{
         void OnDisplay();
     };
 
+    // TODO //
+    /* Tickbox adjusting a Boolean variable. */
     class MenuItemTickBox: public MenuItem
     {
-        class TickBox: public sf::Drawable, sf::Transformable
+        class TickBox: public sf::Drawable, public sf::Transformable
         {
+            bool Collide;
+            void OnCollision();
+            void OnCollisionEntry();
+            void OnCollisionExit();
+
+            bool LMBPressed;
             mutable sf::Text Name;
             mutable sf::Sprite TickBoxCube;
             mutable sf::Sprite TickBoxV;
         public:
+            bool* Target;
+            const char * Text;
+            TickBox();
             void draw(sf::RenderTarget& target, sf::RenderStates states)const;
+            void CollisionCheck();
         };
     public:
+        static sf::Texture TickBoxCubeTex;
+        static sf::Texture TickBoxVTex;
+
+        bool* Target;
+        TickBox Box;
+        MenuItemTickBox();
         void OnDisplay();
+        void OnCollisionCheck();
+    };
+
+    /* Clickable button, performing a function */
+    class MenuItemButton: public MenuItem
+    {
+        bool Collide;
+        void OnCollision();
+        void OnCollisionEntry();
+        void OnCollisionExit();
+    public:
+        MenuItemButton();
+        std::function<void()> OnClicked = [](){};
+        sf::Text Text;
+        void OnDisplay();
+        void OnCollisionCheck();
     };
 
     /* Row of MenuItems to display */
     class MenuRow
     {
-        bool ActiveMenu;
+        bool IsActiveMenu;
         int Scroll;
     protected:
         friend class MenuItemLink;
@@ -134,10 +173,15 @@ namespace KNOW{
     /* Collection of MenuRows forming a Menu */
     class Menu
     {
-        MenuRow BaseRow;
+        friend class MenuItem;
+        sf::Vector2f TargetPosition;
     public:
+        int HorizontalMenuSize;
         KNOW::View MenuView;
+        MenuRow BaseRow;
+        MenuRow* Focus;
         void OnDisplay();
+        bool PopBack();
         Menu();
     };
 }

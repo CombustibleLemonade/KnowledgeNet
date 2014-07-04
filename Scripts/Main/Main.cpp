@@ -15,9 +15,33 @@ int main ()
     KNOW::DefaultFont.loadFromFile("PixelatedFont/SFPixelate-Bold.ttf");
 
     KNOW::Menu TestMenu;
+    KNOW::MenuItemLink* MILHandle;
+    KNOW::MenuItemSlider* MISHandle;
+    KNOW::MenuItemTickBox* MITHandle;
+    KNOW::MenuItemButton* MIBHandle;
+
+    KNOW::MenuRow* MenuRowHandle;
+
+    MenuRowHandle = new KNOW::MenuRow;
+
+    MISHandle = new KNOW::MenuItemSlider;
+    MISHandle->Text = "Click Volume: ";
+    MISHandle->Value = &KNOW::ClickVolume;
+    MenuRowHandle = new KNOW::MenuRow;
+    MenuRowHandle->MenuItems.push_back(MISHandle);
+    MenuRowHandle->MenuItems.push_back(new KNOW::MenuItemTickBox);
+    MILHandle = new KNOW::MenuItemLink("Audio");
+    MILHandle->Next = MenuRowHandle;
+    TestMenu.BaseRow.MenuItems.push_back(MILHandle);
+    MIBHandle = new KNOW::MenuItemButton;
+    MIBHandle->OnClicked = [](){};
+    MIBHandle->Text.setString("Quit");
+    TestMenu.BaseRow.MenuItems.push_back(MIBHandle);
+    TestMenu.BaseRow.MenuItems.push_back(new KNOW::MenuItemSlider);
 
     KNOW::View Viewer;
 
+    //KNOW::DefaultWindow.create(sf::VideoMode(1920, 1080), "Testing", sf::Style::Fullscreen);
     while (KNOW::DefaultWindow.isOpen())
     {
         sf::Event Event;
@@ -39,7 +63,12 @@ int main ()
             if (Event.type == sf::Event::KeyPressed)
             {
                 if (Event.key.code == sf::Keyboard::Escape)
-                {KNOW::DefaultWindow.close();}
+                {
+                    if (!TestMenu.PopBack())
+                    {
+                        KNOW::DisplayMenu = !KNOW::DisplayMenu;
+                    }
+                }
                 if (Event.key.code == sf::Keyboard::F1){
                     KNOW::DisplayMenu = !KNOW::DisplayMenu;
                 }

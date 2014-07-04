@@ -9,6 +9,7 @@ namespace KNOW {
     extern sf::Font DefaultFont;
     extern bool DisplayMenu;
     extern MenuRow MainMenu;
+    extern float ClickVolume;
 }
 
 #endif

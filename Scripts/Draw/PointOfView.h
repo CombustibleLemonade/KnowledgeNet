@@ -14,6 +14,7 @@ namespace KNOW
         sf::Vector2f Location;
         float ZoomValue;
         void AdjustToScreenRes();
+        void SetTargetPosition(sf::Vector2f TargetPosition);
     };
 }
 

@@ -10,4 +10,5 @@ namespace KNOW
     sf::Font DefaultFont;
     bool DisplayMenu = true;
     MenuRow MainMenu;
+    float ClickVolume = 50;
 }

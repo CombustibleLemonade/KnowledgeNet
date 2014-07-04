@@ -5,15 +5,24 @@
 #include <cmath>
 #include <iostream>
 #include <string>
-std::vector<KNOW::Menu*> Menus;
 
+
+float Winning = 0;
+bool DefaultTickBoxTarget = false;
 
 namespace KNOW{
     sf::Texture MenuItemSlider::SlideTexture;
-    MenuRow ActiveMenuRow;
+    int HorizontalMenuIndex = 0;
+
+    std::vector<KNOW::Menu*> Menus;
+    MenuRow* ActiveMenuRow;
+    Menu* ActiveMenu;
 
     /* Virtual initializer*/
     MenuItem::MenuItem()
+    {}
+
+    void MenuItem::OnCollisionCheck()
     {}
 
     /* Initialize Transformable */
@@ -26,6 +35,7 @@ namespace KNOW{
     MenuItemLink::MenuItemLink(const char *TextArg)
     {
         Next = NULL;
+        DisplayNext = false;
         Transformable = &Text;
         Text.setFont(KNOW::DefaultFont);
         Text.setString(TextArg);
@@ -34,35 +44,67 @@ namespace KNOW{
     /* This function is called upon a redisplay of the screen */
     void MenuItemLink::OnDisplay()
     {
-        bool PrevCollide = Collide;
-        Collide = KNOW::CursorCollisionCheck(Text.getGlobalBounds());
-        Text.setOrigin(floor(Text.getGlobalBounds().width/2),
-                                ceil(Text.getGlobalBounds().top/2+0.1));
-
-        if (Collide)
-        {
-            if (!PrevCollide)
-            {
-                OnCollisionEntry();
-            }
-            OnCollision();
-        }
-        else if (PrevCollide)
-        {
-            OnCollisionExit();
-        }
-        PreviousLMBPressed = sf::Mouse::isButtonPressed(sf::Mouse::Left);
         KNOW::DefaultWindow.draw(Text);
+        if (DisplayNext)
+        {
+            if (ActiveMenu->HorizontalMenuSize == HorizontalMenuIndex)
+            {
+                DisplayNext = false;
+                ActiveMenu->Focus = ActiveMenuRow;
+                ActiveMenuRow->IsActiveMenu = true;
+            }
+            Next->OnDisplay();
+            HorizontalMenuIndex += 1;
+        }
+    }
+
+    void MenuItemLink::OnCollisionCheck()
+    {
+        if (DisplayNext && Next)
+        {
+            Next->OnDisplay();
+        }
+        else
+        {
+            bool PrevCollide = Collide;
+            Collide = KNOW::CursorCollisionCheck(Text.getGlobalBounds());
+            sf::Vector2f Origin = sf::Vector2f(floor(Text.getGlobalBounds().width/2),
+                                               floor(Text.getGlobalBounds().height/2));
+            Text.setOrigin(Origin);
+
+            if (Collide)
+            {
+                if (!PrevCollide)
+                {
+                    OnCollisionEntry();
+                }
+                OnCollision();
+            }
+            else if (PrevCollide)
+            {
+                OnCollisionExit();
+            }
+            PreviousLMBPressed = sf::Mouse::isButtonPressed(sf::Mouse::Left);
+        }
     }
 
     /* These functions are called when the cursor moves over the MenuItemLink. */
     void MenuItemLink::OnCollision()
     {
-        Next = new MenuRow;
+        //Next = new MenuRow;
         if (Next != NULL)
         {
-            Next->xLocation = 700;
+            MenuRow* PreviousActive = ActiveMenuRow;
+            Next->xLocation = ActiveMenuRow->xLocation + 750;
             Next->OnDisplay();
+
+            if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && !PreviousLMBPressed && !DisplayNext)
+            {
+                DisplayNext = true;
+                PreviousActive->IsActiveMenu = false;
+                ActiveMenu->Focus = Next;
+                ActiveMenu->HorizontalMenuSize++;
+            }
         }
     }
 
@@ -79,8 +121,8 @@ namespace KNOW{
     /* Function which is called by all initializers. */
     void MenuItemSlider::SliderBar::InitObjects()
     {
-        Value = new float;
-        *Value = 50;
+        Value = &Winning;
+        //*Value = 50;
 
         Min = 0;
         Max = 100;
@@ -154,7 +196,7 @@ namespace KNOW{
     /* This function fixes abstractness and gets called upon sf::RenderWindow::draw. */
     void MenuItemSlider::SliderBar::draw(sf::RenderTarget &target, sf::RenderStates states) const
     {
-        if (Value)
+        if (Value!=NULL)
         {
             if (*Value<Min)
                 *Value = Min;
@@ -226,13 +268,19 @@ namespace KNOW{
         MenuItemSlider::SlideTexture.loadFromFile("Menu/SliderBackground.png");
 
         Transformable = &Slider;
-        Text = "Winning!";
+        Text = "This is a MenuItemSlider: ";
         Collide = false;
+        Value = NULL;
     }
 
     /* This function is called before each new frame is displayed. */
     void MenuItemSlider::OnDisplay()
     {
+        Slider.Text = Text;
+        if (Value!=NULL)
+        {
+            Slider.Value = Value;
+        }
         if (Slider.IsSliding && sf::Mouse::isButtonPressed(sf::Mouse::Left))
         {
             Slider.OnDrag();
@@ -258,6 +306,147 @@ namespace KNOW{
         KNOW::DefaultWindow.draw(Slider);
     }
 
+    sf::Texture MenuItemTickBox::TickBoxCubeTex;
+    sf::Texture MenuItemTickBox::TickBoxVTex;
+
+    void MenuItemTickBox::TickBox::OnCollision()
+    {
+        bool PrevLMBPressed = LMBPressed;
+        LMBPressed = sf::Mouse::isButtonPressed(sf::Mouse::Left);
+        if (LMBPressed && !PrevLMBPressed)
+        {
+            *Target = !*Target;
+            std::cout << DefaultTickBoxTarget << std::endl;
+        }
+    }
+
+    void MenuItemTickBox::TickBox::OnCollisionEntry()
+    {
+        TickBoxCube.setColor(sf::Color(255, 0, 0));
+    }
+
+    void MenuItemTickBox::TickBox::OnCollisionExit()
+    {
+        TickBoxCube.setColor(sf::Color(255, 255, 255));
+    }
+
+    /* TickBox constructor. */
+    MenuItemTickBox::TickBox::TickBox()
+    {
+        Collide = false;
+        TickBoxCubeTex.loadFromFile("Menu/CheckBoxBackground.png");
+        TickBoxCube.setTexture(TickBoxCubeTex);
+        TickBoxVTex.loadFromFile("Menu/CheckBoxV.png");
+        TickBoxV.setTexture(TickBoxVTex);
+        Name.setFont(KNOW::DefaultFont);
+        Name.setString("adsf: ");
+    }
+
+    /* TickBox drawing func. */
+    void MenuItemTickBox::TickBox::draw(sf::RenderTarget &target, sf::RenderStates states) const
+    {
+        TickBoxV.setPosition(getPosition() + sf::Vector2f(4,0));
+        TickBoxCube.setPosition(getPosition()+sf::Vector2f(0,-4));
+        Name.setPosition(getPosition());
+        sf::Vector2f Origin = sf::Vector2f(floor(Name.getGlobalBounds().width),
+                                           floor(Name.getGlobalBounds().height/2));
+        Name.setOrigin(Origin);
+        if (*Target)
+            target.draw(TickBoxV);
+        target.draw(TickBoxCube);
+        target.draw(Name);
+    }
+
+    void MenuItemTickBox::TickBox::CollisionCheck()
+    {
+        bool PrevCollide = Collide;
+        Collide = KNOW::CursorCollisionCheck(TickBoxCube.getGlobalBounds());
+        if(Collide)
+        {
+            if (!PrevCollide)
+            {
+                OnCollisionEntry();
+            }
+            OnCollision();
+        }
+        else if(PrevCollide)
+        {
+            OnCollisionExit();
+        }
+    }
+
+    /* Constructor for MenuItemTickBox. */
+    MenuItemTickBox::MenuItemTickBox()
+    {
+        Target = &DefaultTickBoxTarget;
+        Transformable = &Box;
+    }
+
+    /* This function is called before each new frame is displayed. */
+    void MenuItemTickBox::OnDisplay()
+    {
+        Box.Target = Target;
+        KNOW::DefaultWindow.draw(Box);
+    }
+
+    void MenuItemTickBox::OnCollisionCheck()
+    {
+        Box.CollisionCheck();
+    }
+
+    void MenuItemButton::OnCollision()
+    {
+        if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+            KNOW::DefaultWindow.close();
+    }
+
+    void MenuItemButton::OnCollisionEntry()
+    {
+        Text.setColor(sf::Color(255, 0, 0));
+    }
+
+    void MenuItemButton::OnCollisionExit()
+    {
+        Text.setColor(sf::Color(255, 255, 255));
+    }
+
+    /* Constructor for MenuItemButton. */
+    MenuItemButton::MenuItemButton()
+    {
+        Transformable = &Text;
+        Text.setFont(KNOW::DefaultFont);
+        Collide = false;
+    }
+
+    /* This function is called before each new frame is displayed. */
+    void MenuItemButton::OnDisplay()
+    {
+        KNOW::DefaultWindow.draw(Text);
+    }
+
+    void MenuItemButton::OnCollisionCheck()
+    {
+        if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+            OnClicked();
+        sf::Vector2f Origin = sf::Vector2f(floor(Text.getGlobalBounds().width/2),
+                                           floor(Text.getGlobalBounds().height/2));
+        Text.setOrigin(Origin);
+        bool PrevCollide = Collide;
+        Collide = KNOW::CursorCollisionCheck(Text.getGlobalBounds());
+        if (Collide)
+        {
+            if (!PrevCollide)
+            {
+                OnCollisionEntry();
+            }
+            OnCollision();
+        }
+        else if (PrevCollide)
+        {
+            OnCollisionExit();
+        }
+    }
+
     /* Constructor for MenuRow. */
     MenuRow::MenuRow()
     {
@@ -266,15 +455,13 @@ namespace KNOW{
         MenuRowView.setCenter(0,0);
         MenuRowView.AdjustToScreenRes();
         xLocation = 0;
-
-        MenuItems.push_back(new MenuItemSlider);
-        MenuItems.push_back(new MenuItemLink("This is a link to a MenuRow"));
+        IsActiveMenu = true;
     }
 
     /* This function is called before each new frame is displayed. */
     void MenuRow::OnDisplay()
     {
-
+        ActiveMenuRow = this;
         sf::View CurrentView = KNOW::DefaultWindow.getView();
         int VectorSize = MenuItems.size();
         int ScrollMax = fmax(-CurrentView.getSize().y/2,
@@ -290,6 +477,10 @@ namespace KNOW{
         for(int i = 0; i < MenuItems.size(); i++)
         {
             MenuItems[i]->Transformable->setPosition(xLocation, i*40 + Scroll);
+            if (IsActiveMenu == true)
+            {
+                MenuItems[i]->OnCollisionCheck();
+            }
             MenuItems[i]->OnDisplay();
         }
     }
@@ -299,12 +490,44 @@ namespace KNOW{
     {
         MenuView.setCenter(0,0);
         MenuView.AdjustToScreenRes();
+        Focus = &BaseRow;
+        TargetPosition = sf::Vector2f(0,0);
+        HorizontalMenuSize = 0;
     }
 
     /* This function is called before each new frame is displayed. */
     void Menu::OnDisplay()
     {
+        ActiveMenu = this;
+        HorizontalMenuIndex = 0;
+        if (MenuView.getCenter().x < Focus->xLocation)
+        {
+            float Delta = (Focus->xLocation-MenuView.getCenter().x)*0.1 + 1;
+            if (MenuView.getCenter().x + Delta < Focus->xLocation)
+            {
+                MenuView.move((Focus->xLocation-MenuView.getCenter().x)*0.1 + 1, 0);
+            }
+            else
+            {
+                MenuView.setCenter(Focus->xLocation, 0);
+            }
+        }
+        if (MenuView.getCenter().x > Focus->xLocation)
+        {
+            float Delta = (Focus->xLocation-MenuView.getCenter().x)*0.1 - 1;
+            MenuView.move(Delta, 0);
+        }
         KNOW::DefaultWindow.setView(MenuView);
         BaseRow.OnDisplay();
+    }
+
+    /* This function will return the user to the previous MenuRow. */
+    bool Menu::PopBack()
+    {
+        if (HorizontalMenuSize>0)
+            HorizontalMenuSize--;
+        else
+            return false;
+        return true;
     }
 }
