@@ -29,15 +29,26 @@ int main ()
     MISHandle->Value = &KNOW::ClickVolume;
     MenuRowHandle = new KNOW::MenuRow;
     MenuRowHandle->MenuItems.push_back(MISHandle);
-    MenuRowHandle->MenuItems.push_back(new KNOW::MenuItemTickBox);
+    MITHandle = new KNOW::MenuItemTickBox;
     MILHandle = new KNOW::MenuItemLink("Audio");
     MILHandle->Next = MenuRowHandle;
     TestMenu.BaseRow.MenuItems.push_back(MILHandle);
+
+    MISHandle = new KNOW::MenuItemSlider;
+    MISHandle->Text = "Brightness: ";
+    MenuRowHandle = new KNOW::MenuRow;
+    MenuRowHandle->MenuItems.push_back(MISHandle);
+    MITHandle = new KNOW::MenuItemTickBox;
+    MITHandle->Text = "Fullscreen: ";
+    MenuRowHandle->MenuItems.push_back(MITHandle);
+    MILHandle = new KNOW::MenuItemLink("Graphics");
+    MILHandle->Next = MenuRowHandle;
+    TestMenu.BaseRow.MenuItems.push_back(MILHandle);
+
     MIBHandle = new KNOW::MenuItemButton;
     MIBHandle->OnClicked = [](){};
     MIBHandle->Text.setString("Quit");
     TestMenu.BaseRow.MenuItems.push_back(MIBHandle);
-    TestMenu.BaseRow.MenuItems.push_back(new KNOW::MenuItemSlider);
 
     KNOW::View Viewer;
 

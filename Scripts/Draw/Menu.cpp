@@ -316,7 +316,6 @@ namespace KNOW{
         if (LMBPressed && !PrevLMBPressed)
         {
             *Target = !*Target;
-            std::cout << DefaultTickBoxTarget << std::endl;
         }
     }
 
@@ -333,18 +332,23 @@ namespace KNOW{
     /* TickBox constructor. */
     MenuItemTickBox::TickBox::TickBox()
     {
+        PrevText = "Test";
         Collide = false;
         TickBoxCubeTex.loadFromFile("Menu/CheckBoxBackground.png");
         TickBoxCube.setTexture(TickBoxCubeTex);
         TickBoxVTex.loadFromFile("Menu/CheckBoxV.png");
         TickBoxV.setTexture(TickBoxVTex);
         Name.setFont(KNOW::DefaultFont);
-        Name.setString("adsf: ");
+        Name.setString(": ");
     }
 
     /* TickBox drawing func. */
     void MenuItemTickBox::TickBox::draw(sf::RenderTarget &target, sf::RenderStates states) const
     {
+        if (Text != PrevText)
+        {
+            Name.setString(Text);
+        }
         TickBoxV.setPosition(getPosition() + sf::Vector2f(4,0));
         TickBoxCube.setPosition(getPosition()+sf::Vector2f(0,-4));
         Name.setPosition(getPosition());
@@ -355,6 +359,7 @@ namespace KNOW{
             target.draw(TickBoxV);
         target.draw(TickBoxCube);
         target.draw(Name);
+        PrevText = Text;
     }
 
     void MenuItemTickBox::TickBox::CollisionCheck()
@@ -386,6 +391,7 @@ namespace KNOW{
     void MenuItemTickBox::OnDisplay()
     {
         Box.Target = Target;
+        Box.Text = Text;
         KNOW::DefaultWindow.draw(Box);
     }
 

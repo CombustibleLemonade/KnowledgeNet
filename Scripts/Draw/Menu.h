@@ -110,6 +110,7 @@ namespace KNOW{
     {
         class TickBox: public sf::Drawable, public sf::Transformable
         {
+            mutable const char* PrevText;
             bool Collide;
             void OnCollision();
             void OnCollisionEntry();
@@ -131,6 +132,7 @@ namespace KNOW{
         static sf::Texture TickBoxVTex;
 
         bool* Target;
+        const char* Text;
         TickBox Box;
         MenuItemTickBox();
         void OnDisplay();
