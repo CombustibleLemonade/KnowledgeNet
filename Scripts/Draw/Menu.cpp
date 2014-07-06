@@ -508,10 +508,11 @@ namespace KNOW{
         HorizontalMenuIndex = 0;
         if (MenuView.getCenter().x < Focus->xLocation)
         {
-            float Delta = (Focus->xLocation-MenuView.getCenter().x)*0.1 + 1;
+            float Delta = (Focus->xLocation-MenuView.getCenter().x)*0.00001 + 0.00001;
+            Delta *= KNOW::DeltaTime.asMicroseconds();
             if (MenuView.getCenter().x + Delta < Focus->xLocation)
             {
-                MenuView.move((Focus->xLocation-MenuView.getCenter().x)*0.1 + 1, 0);
+                MenuView.move(Delta, 0);
             }
             else
             {
@@ -520,7 +521,8 @@ namespace KNOW{
         }
         if (MenuView.getCenter().x > Focus->xLocation)
         {
-            float Delta = (Focus->xLocation-MenuView.getCenter().x)*0.1 - 1;
+            float Delta = (Focus->xLocation-MenuView.getCenter().x)*0.00001 - 0.00001;
+            Delta *= KNOW::DeltaTime.asMicroseconds();
             MenuView.move(Delta, 0);
         }
         KNOW::DefaultWindow.setView(MenuView);
