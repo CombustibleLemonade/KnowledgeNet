@@ -373,6 +373,9 @@ namespace KNOW{
                 OnCollisionEntry();
             }
             OnCollision();
+
+            if (true)
+            {}
         }
         else if(PrevCollide)
         {
@@ -384,6 +387,7 @@ namespace KNOW{
     MenuItemTickBox::MenuItemTickBox()
     {
         Target = &DefaultTickBoxTarget;
+        PrevTarget = *Target;
         Transformable = &Box;
     }
 
@@ -398,6 +402,15 @@ namespace KNOW{
     void MenuItemTickBox::OnCollisionCheck()
     {
         Box.CollisionCheck();
+        if (PrevTarget != *Target)
+        {
+            OnChange();
+            if (*Target)
+                OnTrue();
+            else
+                OnFalse();
+            PrevTarget = *Target;
+        }
     }
 
     void MenuItemButton::OnCollision()
@@ -508,7 +521,7 @@ namespace KNOW{
         HorizontalMenuIndex = 0;
         if (MenuView.getCenter().x < Focus->xLocation)
         {
-            float Delta = (Focus->xLocation-MenuView.getCenter().x)*0.00001 + 0.00001;
+            float Delta = (Focus->xLocation-MenuView.getCenter().x)*0.00001 + 0.000001;
             Delta *= KNOW::DeltaTime.asMicroseconds();
             if (MenuView.getCenter().x + Delta < Focus->xLocation)
             {
@@ -521,7 +534,7 @@ namespace KNOW{
         }
         if (MenuView.getCenter().x > Focus->xLocation)
         {
-            float Delta = (Focus->xLocation-MenuView.getCenter().x)*0.00001 - 0.00001;
+            float Delta = (Focus->xLocation-MenuView.getCenter().x)*0.00001 - 0.000001;
             Delta *= KNOW::DeltaTime.asMicroseconds();
             MenuView.move(Delta, 0);
         }

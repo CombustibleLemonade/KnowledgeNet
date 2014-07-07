@@ -127,7 +127,10 @@ namespace KNOW{
             void draw(sf::RenderTarget& target, sf::RenderStates states)const;
             void CollisionCheck();
         };
+
+        bool PrevTarget;
     public:
+
         static sf::Texture TickBoxCubeTex;
         static sf::Texture TickBoxVTex;
 
@@ -137,6 +140,9 @@ namespace KNOW{
         MenuItemTickBox();
         void OnDisplay();
         void OnCollisionCheck();
+        std::function<void()> OnChange = [](){};
+        std::function<void()> OnTrue = [](){};
+        std::function<void()> OnFalse = [](){};
     };
 
     /* Clickable button, performing a function */

@@ -14,7 +14,7 @@ sf::Clock DeltaTimeClock;
 int main ()
 {
     KNOW::DefaultFont.loadFromFile("PixelatedFont/SFPixelate-Bold.ttf");
-    KNOW::DefaultWindow.create(sf::VideoMode(1920, 1080), "Winning", sf::Style::Fullscreen);
+    KNOW::DefaultWindow.create(sf::VideoMode(1280, 720), "Winning");
 
     KNOW::Menu TestMenu;
     KNOW::MenuItemLink* MILHandle;
@@ -42,6 +42,14 @@ int main ()
     MenuRowHandle->MenuItems.push_back(MISHandle);
     MITHandle = new KNOW::MenuItemTickBox;
     MITHandle->Text = "Fullscreen: ";
+    MITHandle->OnTrue = []()
+    {
+        KNOW::DefaultWindow.create(sf::VideoMode(1920, 1080), "KNOW", sf::Style::Fullscreen);
+    };
+    MITHandle->OnFalse = []()
+    {
+        KNOW::DefaultWindow.create(sf::VideoMode(1280, 720), "KNOW");
+    };
     MenuRowHandle->MenuItems.push_back(MITHandle);
     MILHandle = new KNOW::MenuItemLink("Graphics");
     MILHandle->Next = MenuRowHandle;
