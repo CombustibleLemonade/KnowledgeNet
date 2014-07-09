@@ -14,8 +14,8 @@ sf::RectangleShape Background;
 int MenuInit()
 {
     Background.setFillColor(sf::Color(0, 0, 0, 100));
-    Background.setSize(sf::Vector2f(KNOW::DefaultWindow.getView().getSize()*2.0f));
-    Background.setPosition(sf::Vector2f(-KNOW::DefaultWindow.getView().getSize()));
+    Background.setSize(sf::Vector2f(KNOW::DefaultWindow.getView().getSize()));
+    Background.setOrigin(sf::Vector2f(KNOW::DefaultWindow.getView().getSize()));
 }
 
 int MenuInitInt = MenuInit();
@@ -554,7 +554,7 @@ namespace KNOW{
         }
         KNOW::DefaultWindow.setView(MenuView);
         Background.setSize(sf::Vector2f(KNOW::DefaultWindow.getView().getSize()*2.0f));
-        Background.setPosition(sf::Vector2f(-KNOW::DefaultWindow.getView().getSize()));
+        Background.setPosition(KNOW::DefaultWindow.getView().getCenter());
 
         KNOW::DefaultWindow.draw(Background);
         BaseRow.OnDisplay();

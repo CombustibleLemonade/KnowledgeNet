@@ -84,6 +84,7 @@ int main ()
                 {}
                 else
                 {}
+                std::cout << Event.mouseWheel.delta << std::endl;
                 KNOW::Block::Zoom(Event.mouseWheel.delta);
             }
             if (Event.type == sf::Event::KeyPressed)
