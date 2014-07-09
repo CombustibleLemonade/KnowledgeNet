@@ -13,8 +13,9 @@ sf::Clock DeltaTimeClock;
 
 int main ()
 {
+    KNOW::Block::BlockView.setCenter(0,0);
     KNOW::DefaultFont.loadFromFile("PixelatedFont/SFPixelate-Bold.ttf");
-    KNOW::DefaultWindow.create(sf::VideoMode(1280, 720), "Winning");
+    KNOW::DefaultWindow.create(sf::VideoMode(1920, 1080), "Winning", sf::Style::Fullscreen);
 
     KNOW::Menu TestMenu;
     KNOW::MenuItemLink* MILHandle;
@@ -50,6 +51,7 @@ int main ()
     {
         KNOW::DefaultWindow.create(sf::VideoMode(1280, 720), "KNOW");
     };
+    MITHandle->Target = &KNOW::IsFullscreen;
     MenuRowHandle->MenuItems.push_back(MITHandle);
     MILHandle = new KNOW::MenuItemLink("Graphics");
     MILHandle->Next = MenuRowHandle;
@@ -82,6 +84,7 @@ int main ()
                 {}
                 else
                 {}
+                KNOW::Block::Zoom(Event.mouseWheel.delta);
             }
             if (Event.type == sf::Event::KeyPressed)
             {
@@ -108,8 +111,13 @@ int main ()
         KNOW::View::OnDisplay();
 
         if (!KNOW::DisplayMenu)
-        {}
-        else if (KNOW::DisplayMenu)
+        {
+            KNOW::Block::CollisionCheck();
+        }
+
+        KNOW::Block::Draw();
+
+        if (KNOW::DisplayMenu)
         {
             TestMenu.OnDisplay();
         }

@@ -7,6 +7,7 @@
 namespace KNOW {
     extern sf::RenderWindow DefaultWindow;
     extern sf::Font DefaultFont;
+    extern bool IsFullscreen;
     extern bool DisplayMenu;
     extern MenuRow MainMenu;
     extern sf::Time DeltaTime;

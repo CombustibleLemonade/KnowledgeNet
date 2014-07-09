@@ -9,6 +9,16 @@
 
 float Winning = 0;
 bool DefaultTickBoxTarget = false;
+sf::RectangleShape Background;
+
+int MenuInit()
+{
+    Background.setFillColor(sf::Color(0, 0, 0, 100));
+    Background.setSize(sf::Vector2f(KNOW::DefaultWindow.getView().getSize()*2.0f));
+    Background.setPosition(sf::Vector2f(-KNOW::DefaultWindow.getView().getSize()));
+}
+
+int MenuInitInt = MenuInit();
 
 namespace KNOW{
     sf::Texture MenuItemSlider::SlideTexture;
@@ -373,9 +383,6 @@ namespace KNOW{
                 OnCollisionEntry();
             }
             OnCollision();
-
-            if (true)
-            {}
         }
         else if(PrevCollide)
         {
@@ -387,6 +394,7 @@ namespace KNOW{
     MenuItemTickBox::MenuItemTickBox()
     {
         Target = &DefaultTickBoxTarget;
+        PrevTargetPointer = Target;
         PrevTarget = *Target;
         Transformable = &Box;
     }
@@ -402,6 +410,12 @@ namespace KNOW{
     void MenuItemTickBox::OnCollisionCheck()
     {
         Box.CollisionCheck();
+        // Prevent OnChange functions being called when the pointer has changed
+        if (PrevTargetPointer != Target)
+        {
+            PrevTargetPointer = Target;
+            PrevTarget = *Target;
+        }
         if (PrevTarget != *Target)
         {
             OnChange();
@@ -539,6 +553,10 @@ namespace KNOW{
             MenuView.move(Delta, 0);
         }
         KNOW::DefaultWindow.setView(MenuView);
+        Background.setSize(sf::Vector2f(KNOW::DefaultWindow.getView().getSize()*2.0f));
+        Background.setPosition(sf::Vector2f(-KNOW::DefaultWindow.getView().getSize()));
+
+        KNOW::DefaultWindow.draw(Background);
         BaseRow.OnDisplay();
     }
 

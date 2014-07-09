@@ -128,6 +128,7 @@ namespace KNOW{
             void CollisionCheck();
         };
 
+        bool* PrevTargetPointer;
         bool PrevTarget;
     public:
 
