@@ -15,7 +15,30 @@ int i = 0;
 namespace KNOW
 {
     void Page::draw(sf::RenderTarget &target, sf::RenderStates states) const
-    {}
+    {
+        for (i = 0; i ++; i<PageItems.size())
+        {
+            KNOW::DefaultWindow.draw(PageItems[i]);
+        }
+    }
+
+    Step::Step()
+    {
+        BackDrop.setTexture(KNOW::Block::BackdropTex);
+    }
+
+    void Step::draw(sf::RenderTarget &target, sf::RenderStates states) const
+    {
+        BackDrop.setPosition(getPosition());
+        KNOW::CenterOrigin(BackDrop);
+
+        Icon.setPosition(getPosition());
+
+        target.draw(Icon);
+        target.draw(BackDrop);
+
+        KNOW::DefaultWindow.draw(PageToDraw);
+    }
 
     sf::Texture Block::BackdropTex;
 
@@ -38,6 +61,32 @@ namespace KNOW
     }
 
     void Block::OnCollision()
+    {
+        bool LMBPressed = sf::Mouse::isButtonPressed(sf::Mouse::Left);
+        if (LMBPressed)
+        {
+            OnClick();
+            if (!PrevLMBPressed)
+            {
+                OnClickEntry();
+            }
+        }
+        else if (PrevLMBPressed)
+        {
+            OnClickExit();
+        }
+        PrevLMBPressed = LMBPressed;
+    }
+
+    void Block::OnClick()
+    {}
+
+    void Block::OnClickEntry()
+    {
+        Selected = true;
+    }
+
+    void Block::OnClickExit()
     {}
 
     void Block::OnCollisionEntry()
@@ -55,6 +104,8 @@ namespace KNOW
     Block::Block()
     {
         PrevCollide = false;
+        PrevLMBPressed = false;
+        Selected = false;
         AllBlocks.push_back(this);
         IconTex.loadFromFile("Block/IconPlus.png");
         IconTex.setSmooth(true);
@@ -62,6 +113,10 @@ namespace KNOW
         BackdropTex.loadFromFile("Block/Backdrop.png");
         BackdropTex.setSmooth(true);
         Backdrop.setTexture(BackdropTex);
+
+        Step* NewStep = new Step;
+        NewStep->setOrigin(0, 0);
+        Steps.push_back(NewStep);
     }
 
     View Block::BlockView;
@@ -69,18 +124,21 @@ namespace KNOW
     void Block::draw(sf::RenderTarget &target, sf::RenderStates states) const
     {
         Backdrop.setPosition(getPosition());
-        sf::FloatRect IconRect = Backdrop.getLocalBounds();
-        sf::Vector2f Displace = sf::Vector2f(IconRect.width/2, IconRect.height/2);
-        Backdrop.setOrigin(Displace);
-
+        KNOW::CenterOrigin(Backdrop);
 
         Icon.setPosition(getPosition());
-        IconRect = Icon.getLocalBounds();
-        Displace = sf::Vector2f(IconRect.width/2, IconRect.height/2);
-        Icon.setOrigin(Displace);
+        KNOW::CenterOrigin(Icon);
 
         target.draw(Backdrop);
         target.draw(Icon);
+        if (Selected)
+        {
+            BlockView.SetTargetPosition(getPosition());
+            for(int i = 0; i<Steps.size(); i++)
+            {
+                target.draw(*Steps[i]);
+            }
+        }
     }
 
     void Block::Draw()

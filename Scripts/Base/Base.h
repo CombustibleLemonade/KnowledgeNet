@@ -12,12 +12,17 @@ namespace KNOW {
         bool Bind(sf::Keyboard::Key KeyboardKeyArg);
         bool Bind(sf::Mouse::Button MouseButtonArg);
         bool Bind(sf::Joystick::Axis JoystickAxisArg);
+
+        void QueueForRebind();
+        void UnqueueForRebind();
     };
 
 
     void BaseDrawFunc();
     bool CursorCollisionCheck(sf::FloatRect CollisionShape);
     bool CursorCollisionCheck(sf::FloatRect CollisionShape, float Zoom);
+
+    void CenterOrigin(sf::Sprite &SpriteToCenter);
 }
 
 #endif

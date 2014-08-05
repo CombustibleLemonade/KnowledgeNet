@@ -9,6 +9,7 @@ namespace KNOW {
     extern sf::Font DefaultFont;
     extern bool IsFullscreen;
     extern bool DisplayMenu;
+    extern bool DisplayPage;
     extern MenuRow MainMenu;
     extern sf::Time DeltaTime;
     extern float ClickVolume;

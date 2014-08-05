@@ -10,6 +10,7 @@ namespace KNOW
     sf::Font DefaultFont;
     bool IsFullscreen = true;
     bool DisplayMenu = true;
+    bool DisplayPage = false;
     MenuRow MainMenu;
     sf::Time DeltaTime;
     float ClickVolume = 50;

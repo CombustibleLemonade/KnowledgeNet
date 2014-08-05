@@ -67,6 +67,66 @@
             <DistClean command="/usr/bin/make -f &quot;/home/jan/Documents/Programming/KnowledgeNet/Run/Makefile&quot;  VERBOSE=1 clean" />
          </MakeCommands>
       </Target>
+      <Target title="install">
+         <Option working_dir="/home/jan/Documents/Programming/KnowledgeNet/Run" />
+         <Option type="4" />
+         <MakeCommands>
+            <Build command="/usr/bin/make -f &quot;/home/jan/Documents/Programming/KnowledgeNet/Run/Makefile&quot;  VERBOSE=1 install" />
+            <CompileFile command="/usr/bin/make -f &quot;/home/jan/Documents/Programming/KnowledgeNet/Run/Makefile&quot;  VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="/usr/bin/make -f &quot;/home/jan/Documents/Programming/KnowledgeNet/Run/Makefile&quot;  VERBOSE=1 clean" />
+            <DistClean command="/usr/bin/make -f &quot;/home/jan/Documents/Programming/KnowledgeNet/Run/Makefile&quot;  VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="install/local">
+         <Option working_dir="/home/jan/Documents/Programming/KnowledgeNet/Run" />
+         <Option type="4" />
+         <MakeCommands>
+            <Build command="/usr/bin/make -f &quot;/home/jan/Documents/Programming/KnowledgeNet/Run/Makefile&quot;  VERBOSE=1 install/local" />
+            <CompileFile command="/usr/bin/make -f &quot;/home/jan/Documents/Programming/KnowledgeNet/Run/Makefile&quot;  VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="/usr/bin/make -f &quot;/home/jan/Documents/Programming/KnowledgeNet/Run/Makefile&quot;  VERBOSE=1 clean" />
+            <DistClean command="/usr/bin/make -f &quot;/home/jan/Documents/Programming/KnowledgeNet/Run/Makefile&quot;  VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="install/strip">
+         <Option working_dir="/home/jan/Documents/Programming/KnowledgeNet/Run" />
+         <Option type="4" />
+         <MakeCommands>
+            <Build command="/usr/bin/make -f &quot;/home/jan/Documents/Programming/KnowledgeNet/Run/Makefile&quot;  VERBOSE=1 install/strip" />
+            <CompileFile command="/usr/bin/make -f &quot;/home/jan/Documents/Programming/KnowledgeNet/Run/Makefile&quot;  VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="/usr/bin/make -f &quot;/home/jan/Documents/Programming/KnowledgeNet/Run/Makefile&quot;  VERBOSE=1 clean" />
+            <DistClean command="/usr/bin/make -f &quot;/home/jan/Documents/Programming/KnowledgeNet/Run/Makefile&quot;  VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="list_install_components">
+         <Option working_dir="/home/jan/Documents/Programming/KnowledgeNet/Run" />
+         <Option type="4" />
+         <MakeCommands>
+            <Build command="/usr/bin/make -f &quot;/home/jan/Documents/Programming/KnowledgeNet/Run/Makefile&quot;  VERBOSE=1 list_install_components" />
+            <CompileFile command="/usr/bin/make -f &quot;/home/jan/Documents/Programming/KnowledgeNet/Run/Makefile&quot;  VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="/usr/bin/make -f &quot;/home/jan/Documents/Programming/KnowledgeNet/Run/Makefile&quot;  VERBOSE=1 clean" />
+            <DistClean command="/usr/bin/make -f &quot;/home/jan/Documents/Programming/KnowledgeNet/Run/Makefile&quot;  VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="package">
+         <Option working_dir="/home/jan/Documents/Programming/KnowledgeNet/Run" />
+         <Option type="4" />
+         <MakeCommands>
+            <Build command="/usr/bin/make -f &quot;/home/jan/Documents/Programming/KnowledgeNet/Run/Makefile&quot;  VERBOSE=1 package" />
+            <CompileFile command="/usr/bin/make -f &quot;/home/jan/Documents/Programming/KnowledgeNet/Run/Makefile&quot;  VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="/usr/bin/make -f &quot;/home/jan/Documents/Programming/KnowledgeNet/Run/Makefile&quot;  VERBOSE=1 clean" />
+            <DistClean command="/usr/bin/make -f &quot;/home/jan/Documents/Programming/KnowledgeNet/Run/Makefile&quot;  VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
+      <Target title="package_source">
+         <Option working_dir="/home/jan/Documents/Programming/KnowledgeNet/Run" />
+         <Option type="4" />
+         <MakeCommands>
+            <Build command="/usr/bin/make -f &quot;/home/jan/Documents/Programming/KnowledgeNet/Run/Makefile&quot;  VERBOSE=1 package_source" />
+            <CompileFile command="/usr/bin/make -f &quot;/home/jan/Documents/Programming/KnowledgeNet/Run/Makefile&quot;  VERBOSE=1 &quot;$file&quot;" />
+            <Clean command="/usr/bin/make -f &quot;/home/jan/Documents/Programming/KnowledgeNet/Run/Makefile&quot;  VERBOSE=1 clean" />
+            <DistClean command="/usr/bin/make -f &quot;/home/jan/Documents/Programming/KnowledgeNet/Run/Makefile&quot;  VERBOSE=1 clean" />
+         </MakeCommands>
+      </Target>
       <Target title="rebuild_cache">
          <Option working_dir="/home/jan/Documents/Programming/KnowledgeNet/Run" />
          <Option type="4" />

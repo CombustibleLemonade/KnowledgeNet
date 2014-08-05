@@ -41,4 +41,10 @@ namespace KNOW
         sf::Vector2f Position = AbsoluteMousePosition(KNOW::DefaultWindow);
         return CollisionShape.contains(Position);
     }
+
+    void CenterOrigin(sf::Sprite &SpriteToCenter)
+    {
+        sf::FloatRect SpriteRect = SpriteToCenter.getLocalBounds();
+        SpriteToCenter.setOrigin(SpriteRect.width/2, SpriteRect.height/2);
+    }
 }

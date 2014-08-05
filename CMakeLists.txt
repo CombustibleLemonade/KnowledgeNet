@@ -37,3 +37,12 @@ add_executable(KnowledgeNet
 
   # create the program "test"
 target_link_libraries(KnowledgeNet ${SFML_LIBRARIES})
+
+include(InstallRequiredSystemLibraries)
+
+set (CPACK_PACKAGE_VERSION_MAJOR "0")
+set (CPACK_PACKAGE_VERSION_MINOR "0")
+
+include(CPack)
+
+install(TARGETS KnowledgeNet DESTINATION bin)
