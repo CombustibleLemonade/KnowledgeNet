@@ -6,11 +6,22 @@
 
 namespace KNOW
 {
+    Profiler::Profiler()
+    {
+        Measure.restart();
+    }
+
+    sf::Time Profiler::operator ()()
+    {
+        sf::Time Delta = Measure.getElapsedTime();
+        Measure.restart();
+        return Delta;
+    }
+
     sf::Vector2f AbsoluteMousePosition(sf::RenderWindow& RelativeWindow)
     {
         sf::Vector2f Position =
                 sf::Vector2f(sf::Mouse::getPosition(RelativeWindow));
-
 
         sf::View WindowView = RelativeWindow.getView();
         sf::Vector2f WindowSize = sf::Vector2f(RelativeWindow.getSize());
@@ -23,9 +34,16 @@ namespace KNOW
         MousePos += WindowView.getCenter()/Zoom-WindowSize/2.0f;
         MousePos *= Zoom;
 
-
         return MousePos;
     }
+
+    float Animation::Y(sf::Time X)
+    {
+        return 0;
+    }
+
+    float AnimationLinear::Y(sf::Time X)
+    {}
 
     void BaseDrawFunc()
     {}

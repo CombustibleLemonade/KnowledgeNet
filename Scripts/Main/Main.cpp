@@ -11,6 +11,8 @@
 sf::Vector2i LastMouseLocation;
 sf::Clock DeltaTimeClock;
 
+KNOW::Profiler Delta;
+
 int main ()
 {
     KNOW::Block::BlockView.setCenter(0,0);
@@ -67,7 +69,7 @@ int main ()
     //KNOW::DefaultWindow.create(sf::VideoMode(1920, 1080), "Testing", sf::Style::Fullscreen);
     while (KNOW::DefaultWindow.isOpen())
     {
-        KNOW::DeltaTime = DeltaTimeClock.getElapsedTime();
+        KNOW::ASDF = DeltaTimeClock.getElapsedTime();
         DeltaTimeClock.restart();
         sf::Event Event;
         if (sf::Mouse::isButtonPressed(sf::Mouse::Middle) && !KNOW::DisplayMenu)

@@ -17,6 +17,40 @@ namespace KNOW {
         void UnqueueForRebind();
     };
 
+    class Profiler
+    {
+        sf::Clock Measure;
+    public:
+        Profiler();
+        sf::Time operator ()();
+    };
+
+    class Animation
+    {
+    public:
+        virtual float Y(sf::Time X);
+    };
+
+    class AnimationBezierCurve: public Animation
+    {};
+
+    class AnimationLinear: public Animation
+    {
+        class LineCurvePoint
+        {
+            sf::Time X;
+            float Y;
+        };
+        std::vector<LineCurvePoint> Points;
+    public:
+        float Y (sf::Time X);
+    };
+
+    class AnimationFunction
+    {
+    public:
+        float Y(sf::Time X);
+    };
 
     void BaseDrawFunc();
     bool CursorCollisionCheck(sf::FloatRect CollisionShape);

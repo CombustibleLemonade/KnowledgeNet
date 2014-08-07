@@ -12,6 +12,6 @@ namespace KNOW
     bool DisplayMenu = true;
     bool DisplayPage = false;
     MenuRow MainMenu;
-    sf::Time DeltaTime;
+    sf::Time ASDF;
     float ClickVolume = 50;
 }

@@ -7,7 +7,6 @@
 
 namespace KNOW
 {
-
     std::vector<KNOW::View*> AllViews;
 
 
@@ -29,6 +28,11 @@ namespace KNOW
         zoom(ZoomValue);
     }
 
-    void View::SetTargetPosition(sf::Vector2f TargetPosition)
+    void View::SetTargetView(sf::View& View)
+    {
+        Target = View;
+    }
+
+    bool View::SlideToView()
     {}
 }

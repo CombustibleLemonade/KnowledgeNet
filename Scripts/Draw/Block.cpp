@@ -133,7 +133,7 @@ namespace KNOW
         target.draw(Icon);
         if (Selected)
         {
-            BlockView.SetTargetPosition(getPosition());
+            //BlockView.SetTargetPosition(getPosition());
             for(int i = 0; i<Steps.size(); i++)
             {
                 target.draw(*Steps[i]);
