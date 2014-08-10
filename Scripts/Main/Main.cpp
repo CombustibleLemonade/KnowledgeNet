@@ -4,6 +4,7 @@
 
 #include "Base/Base.h"
 #include "Base/Defaults.h"
+#include "Base/Animation.hpp"
 #include "Draw/Block.h"
 #include "Draw/PointOfView.h"
 #include "Draw/Menu.h"
@@ -15,10 +16,22 @@ KNOW::Profiler Delta;
 
 int main ()
 {
+    AnimationLinear<float> Test;
+    Test.Points.push_back(AnimationPoint<float>(sf::seconds(0), 1));
+    Test.Points.push_back(AnimationPoint<float>(sf::seconds(1), 1.2));
+    Test.Points.push_back(AnimationPoint<float>(sf::seconds(2), 0.3));
+    sf::Clock TestClock;
+
     KNOW::Block::BlockView.setCenter(0,0);
     KNOW::DefaultFont.loadFromFile("PixelatedFont/SFPixelate-Bold.ttf");
-    KNOW::DefaultWindow.create(sf::VideoMode(1920, 1080), "Winning", sf::Style::Fullscreen);
-
+    if (KNOW::IsFullscreen)
+    {
+        KNOW::DefaultWindow.create(sf::VideoMode(1920, 1080), "Winning", sf::Style::Fullscreen);
+    }
+    else
+    {
+        KNOW::DefaultWindow.create(sf::VideoMode(1280, 720), "KNOW");
+    }
     KNOW::Menu TestMenu;
     KNOW::MenuItemLink* MILHandle;
     KNOW::MenuItemSlider* MISHandle;
@@ -69,7 +82,7 @@ int main ()
     //KNOW::DefaultWindow.create(sf::VideoMode(1920, 1080), "Testing", sf::Style::Fullscreen);
     while (KNOW::DefaultWindow.isOpen())
     {
-        KNOW::ASDF = DeltaTimeClock.getElapsedTime();
+        KNOW::MenuDelta = DeltaTimeClock.getElapsedTime();
         DeltaTimeClock.restart();
         sf::Event Event;
         if (sf::Mouse::isButtonPressed(sf::Mouse::Middle) && !KNOW::DisplayMenu)
@@ -123,6 +136,8 @@ int main ()
         {
             TestMenu.OnDisplay();
         }
+
+        std::cout << Test.Y(TestClock.getElapsedTime()-sf::seconds(1)) << std::endl;
         KNOW::DefaultWindow.display();
     }
     return 0;

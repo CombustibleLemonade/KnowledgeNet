@@ -2,6 +2,7 @@
 #define BASE
 
 #include <SFML/Graphics.hpp>
+#include <functional>
 
 namespace KNOW {
     class KeyBinding{
@@ -25,31 +26,12 @@ namespace KNOW {
         sf::Time operator ()();
     };
 
-    class Animation
+    class Call
     {
+        static std::vector<float> AllCalls;
     public:
-        virtual float Y(sf::Time X);
-    };
-
-    class AnimationBezierCurve: public Animation
-    {};
-
-    class AnimationLinear: public Animation
-    {
-        class LineCurvePoint
-        {
-            sf::Time X;
-            float Y;
-        };
-        std::vector<LineCurvePoint> Points;
-    public:
-        float Y (sf::Time X);
-    };
-
-    class AnimationFunction
-    {
-    public:
-        float Y(sf::Time X);
+        std::function<void(void)> Function;
+        void operator()();
     };
 
     void BaseDrawFunc();

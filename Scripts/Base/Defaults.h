@@ -11,7 +11,7 @@ namespace KNOW {
     extern bool DisplayMenu;
     extern bool DisplayPage;
     extern MenuRow MainMenu;
-    extern sf::Time ASDF;
+    extern sf::Time MenuDelta;
     extern float ClickVolume;
 }
 

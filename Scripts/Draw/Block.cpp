@@ -1,6 +1,7 @@
 #include "Base/Defaults.h"
 #include "Base/Base.h"
 #include "Block.h"
+#include "Base/Animation.hpp"
 
 #include <iostream>
 

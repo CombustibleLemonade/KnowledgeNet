@@ -37,14 +37,6 @@ namespace KNOW
         return MousePos;
     }
 
-    float Animation::Y(sf::Time X)
-    {
-        return 0;
-    }
-
-    float AnimationLinear::Y(sf::Time X)
-    {}
-
     void BaseDrawFunc()
     {}
 

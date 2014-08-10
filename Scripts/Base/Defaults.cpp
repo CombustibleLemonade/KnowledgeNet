@@ -8,10 +8,10 @@ namespace KNOW
 {
     sf::RenderWindow DefaultWindow(sf::VideoMode(1600, 900), "My window");
     sf::Font DefaultFont;
-    bool IsFullscreen = true;
+    bool IsFullscreen = false;
     bool DisplayMenu = true;
     bool DisplayPage = false;
     MenuRow MainMenu;
-    sf::Time ASDF;
+    sf::Time MenuDelta;
     float ClickVolume = 50;
 }
